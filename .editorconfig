@@ -1,0 +1,27 @@
+# EditorConfig helps developers define and maintain consistent coding styles between different editors and IDEs
+# For more information about the properties used in EditorConfig see http://editorconfig.org
+
+# Top-most EditorConfig file
+root = true
+
+# Unix-style newlines with a newline ending every file
+[*]
+end_of_line = lf
+insert_final_newline = true
+
+# Matches the root directories of TypeScript projects
+[*.ts]
+# Use 2 spaces for TypeScript files
+indent_size = 4
+
+[*.html]
+# Use 2 spaces for HTML files
+indent_size = 4
+
+[*.css]
+# Use 2 spaces for CSS files
+indent_size = 4
+
+[*.json]
+# Use 2 spaces for JSON files
+indent_size = 4

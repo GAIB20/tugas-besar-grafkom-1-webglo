@@ -1,0 +1,15 @@
+{
+    "name": "tugas-besar-grafkom-1-webglo",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "npx tsc --watch"
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "typescript": "^5.4.2"
+    }
+}
