@@ -28,3 +28,5 @@ abstract class Shape {
         this.ky = 0;
     }
 }
+
+export default Shape;

@@ -15,3 +15,5 @@ class Point {
         this.color = { r: r, g: g, b: b, a: a };
     }
 }
+
+export default Point;
