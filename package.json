@@ -5,11 +5,15 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "dev": "npx tsc --watch"
+        "dev": "npx webpack --watch",
+        "build": "npx webpack"
     },
     "author": "",
     "license": "ISC",
     "devDependencies": {
-        "typescript": "^5.4.2"
+        "ts-loader": "^9.5.1",
+        "typescript": "^5.4.2",
+        "webpack": "^5.90.3",
+        "webpack-cli": "^5.1.4"
     }
 }

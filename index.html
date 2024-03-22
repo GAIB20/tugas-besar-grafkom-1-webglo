@@ -4,51 +4,60 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="./style.css" type="text/css" />
-        <!--  -->
-        <script id="vertex-shader-2d" type="notjs">
+
+        <script id="vertex-shader-2d" type="x-shader/x-vertex">
             // sebuah atribut akan menerima data dari buffer
-            attribute vec4 a_position;
+            attribute vec2 a_position;
 
             // untuk warna
-            attribute vec4 a_color;
+            // attribute vec4 a_color;
 
             // matriks untuk transformasi
             uniform mat3 u_matrix;
 
             // untuk warna juga
-            varying vec4 v_color;
+            // varying vec4 v_color;
 
             // semua shader punya fungsi utama (main)
             void main() {
                 // gl_Position merupakan variabel spesial yang harus diatur oleh vertex shader
                 // (anggap saja sebagai return result koordinat clip space)
                 gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
-                v_color = a_color;
+                // v_color = a_color;
             }
         </script>
-        <script id="fragment-shader-2d" type="notjs">
+        <script id="fragment-shader-2d" type="x-shader/x-fragment">
             // fragment shader tidak punya default precision, jadi kita harus memilihnya.
             // mediump merupakan default bagus yang berarti "medium precision".
             // selain itu juga ada highp (high precision) dan lowp (low precision).
             precision mediump float;
 
             // vector 4 component [r,g,b,a] (alpha -> opacity)
-            varying vec4 v_color;
+            // varying vec4 v_color;
 
             void main() {
                 // gl_FragColor merupakan variabel spesial yang harus diatur
                 // oleh fragment shader (anggap saja sebagai return warna)
-                gl_FragColor = v_color;
+                gl_FragColor = vec4(1, 0, 0.5, 1);
             }
         </script>
         <script type="text/javascript" src="./dist/index.js" defer></script>
     </head>
     <body>
-        <div>
+        <div class="title-wrap">
             <h1 id="title">Web GLo</h1>
         </div>
-        <div>
+        <div class="body-wrap">
+            <div class="left-control control">
+                <button>Select</button>
+            </div>
             <canvas id="gl-canvas"></canvas>
+            <div class="right-control control">
+                <button class="btn" id="line">Line</button>
+                <button class="btn">Square</button>
+                <button class="btn">Rectangle</button>
+                <button class="btn">Polygon</button>
+            </div>
         </div>
     </body>
 </html>

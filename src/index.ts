@@ -1,4 +1,6 @@
+import DrawHandler from "./handler/DrawHandler";
 import createProgram from "./utils/program";
+import resizeCanvasToDisplaySize from "./utils/resize";
 import createShader from "./utils/shaders";
 
 const canvas = document.getElementById("gl-canvas") as HTMLCanvasElement;
@@ -17,3 +19,13 @@ const fragmentShader = createShader(
 );
 
 const program = createProgram(gl, vertexShader, fragmentShader);
+
+gl.useProgram(program);
+
+resizeCanvasToDisplaySize(gl.canvas as HTMLCanvasElement);
+
+gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+gl.clear(gl.COLOR_BUFFER_BIT);
+
+const drawHandler = new DrawHandler(gl, program, canvas, document);

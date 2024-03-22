@@ -1,0 +1,54 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --black: #333;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.title-wrap {
+    margin: auto;
+    height: auto;
+}
+
+.body-wrap {
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+}
+
+.control {
+    width: 10vw;
+}
+
+.right-control {
+    display: flex;
+    flex-direction: column;
+    background: var(--black);
+    border-radius: 20px;
+
+    /* background: black; */
+}
+
+.btn {
+    width: 90%;
+    margin: auto;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem 0rem;
+    font-size: 15px;
+    border-radius: 20px;
+    background: white;
+}
+
+canvas {
+    height: 100vh;
+    width: 100%;
+    z-index: 0;
+}

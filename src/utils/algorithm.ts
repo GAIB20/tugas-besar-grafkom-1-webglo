@@ -1,4 +1,4 @@
-import Point from "../object/base/Point";
+import Point from "../object/base/Vertex";
 
 function convexHull(arr: Point[]): Point[] {
     const hull: Point[] = [];
