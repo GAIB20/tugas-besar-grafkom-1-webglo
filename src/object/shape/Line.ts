@@ -16,7 +16,6 @@ class Line extends Shape {
     }
 
     public setPosition(gl: WebGLRenderingContext): void {
-        console.log(`p1: ${this.p1.coorArray()}, p2: ${this.p2?.coorArray()}`);
         gl.bufferData(
             gl.ARRAY_BUFFER,
             new Float32Array([
@@ -51,6 +50,7 @@ class Line extends Shape {
         if (index == 1) this.p1 = vertex;
         else if (index == 2) this.p2 = vertex;
     }
+
     public centroid(): [number, number] {
         return [
             (this.p1.coor.x + (this.p2?.coor.x as number)) / 2,

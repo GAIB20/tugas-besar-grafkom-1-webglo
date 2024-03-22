@@ -1,4 +1,5 @@
 import ShapeEnum from "../../enum/ShapeEnum";
+import Matrix from "../../math/Matrix";
 import Transform from "../../math/Transform";
 import Vertex from "../base/Vertex";
 
@@ -23,11 +24,8 @@ abstract class Shape {
 
     public render(render: RenderProps) {
         if (!this.isNullVertex()) {
-            console.log("incomplete");
             return;
         }
-
-        console.log("render");
 
         /** Position */
         const positionLoc = render.gl.getAttribLocation(

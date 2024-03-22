@@ -1,5 +1,4 @@
 import ShapeEnum from "../enum/ShapeEnum";
-import { Coordinate } from "../object/base/Coordinate";
 import Vertex from "../object/base/Vertex";
 import Line from "../object/shape/Line";
 import Shape from "../object/shape/Shape";
@@ -16,7 +15,7 @@ class DrawHandler {
     public colorBuffer: WebGLBuffer;
     public positionBuffer: WebGLBuffer;
     public selectShape: ShapeEnum | null = null;
-    public listOfShape: Shape[] = [];
+    public listOfShape: Shape[];
 
     /** COMPONENT */
     public lineBtn: HTMLElement | null = null;
@@ -30,7 +29,7 @@ class DrawHandler {
         // this.gl = gl;
         this.canvas = canvas;
         this.document = document;
-
+        this.listOfShape = [];
         this.colorBuffer = gl.createBuffer() as WebGLBuffer;
         this.positionBuffer = gl.createBuffer() as WebGLBuffer;
 
@@ -40,6 +39,8 @@ class DrawHandler {
             positionBuffer: this.positionBuffer,
             colorBuffer: this.colorBuffer,
         };
+
+        this.document.addEventListener("DOMContentLoaded", this.rerender);
         this.initComponent();
         this.btnListener();
         this.canvasListener();
@@ -53,7 +54,6 @@ class DrawHandler {
         this.lineBtn?.addEventListener("click", () => {
             this.onDraw = false;
             this.selectShape = ShapeEnum.LINE;
-            console.log(`onDraw: ${this.onDraw}, ${this.selectShape}`);
         });
     }
 
@@ -63,7 +63,6 @@ class DrawHandler {
                 [event.clientX, event.clientY, 0],
                 [0, 0, 0, 0]
             );
-            console.log(`coor: x: ${point.coor.x}, y: ${point.coor.y}`);
             switch (this.selectShape) {
                 case ShapeEnum.LINE:
                     if (!this.onDraw) {
@@ -89,7 +88,6 @@ class DrawHandler {
 
         this.canvas.addEventListener("mousemove", (event: MouseEvent) => {
             if (!this.onDraw) return;
-            console.log("move");
             const point = new Vertex(
                 [event.clientX, event.clientY, 0],
                 [0, 0, 0, 0]
@@ -106,10 +104,16 @@ class DrawHandler {
                 default:
                     break;
             }
-
-            console.log(`object ${(this.listOfShape[0] as Line).p1}`);
         });
     }
+
+    public rerender = (): void => {
+        for (let i = 0; i < this.listOfShape.length; i++) {
+            this.listOfShape[i].render(this.renderProps);
+        }
+
+        window.requestAnimationFrame(this.rerender);
+    };
 }
 
 export default DrawHandler;

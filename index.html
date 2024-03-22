@@ -16,7 +16,7 @@
             uniform mat3 u_matrix;
 
             // untuk warna juga
-            // varying vec4 v_color;
+            varying vec4 v_color;
 
             // semua shader punya fungsi utama (main)
             void main() {
@@ -24,6 +24,7 @@
                 // (anggap saja sebagai return result koordinat clip space)
                 gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
                 // v_color = a_color;
+                v_color =  vec4(1, 0, 0.5, 1);
             }
         </script>
         <script id="fragment-shader-2d" type="x-shader/x-fragment">
@@ -44,19 +45,24 @@
         <script type="text/javascript" src="./dist/index.js" defer></script>
     </head>
     <body>
+        <canvas id="gl-canvas"></canvas>
         <div class="title-wrap">
             <h1 id="title">Web GLo</h1>
         </div>
-        <div class="body-wrap">
-            <div class="left-control control">
-                <button>Select</button>
-            </div>
-            <canvas id="gl-canvas"></canvas>
-            <div class="right-control control">
-                <button class="btn" id="line">Line</button>
-                <button class="btn">Square</button>
-                <button class="btn">Rectangle</button>
-                <button class="btn">Polygon</button>
+        <div class="shape-control control">
+            <button class="btn btn2">Save</button>
+            <button class="btn btn2">Load</button>
+        </div>
+        <div class="bottom-control control">
+            <div class="right-bottom">
+                <div class="top">
+                    <button class="btn" id="line">Line</button>
+                    <button class="btn">Square</button>
+                </div>
+                <div class="top">
+                    <button class="btn">Rectangle</button>
+                    <button class="btn">Polygon</button>
+                </div>
             </div>
         </div>
     </body>

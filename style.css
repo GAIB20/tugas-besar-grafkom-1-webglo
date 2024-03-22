@@ -1,6 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Reggae+One&display=swap");
+
 * {
     margin: 0;
     padding: 0;
+    font-family: "Reggae One", system-ui;
+    border-style: none;
 }
 
 :root {
@@ -13,42 +17,65 @@ body {
 }
 
 .title-wrap {
+    position: fixed;
+    padding: 10px;
     margin: auto;
     height: auto;
 }
 
-.body-wrap {
-    margin: auto;
-    display: flex;
-    flex-direction: row;
+#gl-canvas {
+    width: 100vw;
+    height: 100vh;
 }
 
 .control {
-    width: 10vw;
+    position: fixed;
 }
 
-.right-control {
+.bottom-control {
+    width: 100vw;
+    right: 0;
+    bottom: 0;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     background: var(--black);
-    border-radius: 20px;
+}
 
-    /* background: black; */
+.right-bottom {
+    width: 30vw;
 }
 
 .btn {
-    width: 90%;
+    width: 50%;
     margin: auto;
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
     padding: 0.5rem 0rem;
     font-size: 15px;
-    border-radius: 20px;
     background: white;
+    border-radius: 2px;
 }
 
-canvas {
-    height: 100vh;
-    width: 100%;
-    z-index: 0;
+.top {
+    display: flex;
+}
+
+/* SYSTEM CONTROL */
+.shape-control {
+    top: 0;
+    right: 0;
+    background: var(--black);
+    width: 12vw;
+    display: flex;
+    flex-direction: column;
+    border-radius: 2px;
+}
+
+.btn2 {
+    margin: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 90%;
 }
