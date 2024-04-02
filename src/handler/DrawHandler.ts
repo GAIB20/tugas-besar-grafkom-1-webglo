@@ -17,7 +17,7 @@ class DrawHandler {
     public positionBuffer: WebGLBuffer;
     public selectShape: ShapeEnum | null = null;
     public listOfShape: Shape[];
-    public polyCounter = 0;
+    public polyCounter = 0; // for polygon
 
     /** COMPONENT */
     public lineBtn: HTMLElement | null = null;
@@ -92,11 +92,10 @@ class DrawHandler {
                 case ShapeEnum.POLYGON:
                     if (!this.onDraw) {
                         const poly = new Polygon(this.listOfShape.length);
+                        
                         poly.addVertex(point);
                         this.listOfShape.push(poly);
                         ++this.polyCounter;
-                        console.log(this.polyCounter);
-
                         this.onDraw = true;
                     } else {
                         const prePoly = this.listOfShape[
@@ -104,7 +103,6 @@ class DrawHandler {
                         ] as Polygon;
                         prePoly.addVertex(point);
                         ++this.polyCounter;
-                        console.log(this.polyCounter);
                         if(this.polyCounter > 2){
                             prePoly.setPosition(this.renderProps.gl);
                             prePoly.render(this.renderProps);
@@ -134,10 +132,6 @@ class DrawHandler {
                     break;
                 
                 case ShapeEnum.POLYGON:
-                    // const prePoly = this.listOfShape[
-                    //     this.listOfShape.length - 1
-                    // ] as Polygon;
-                    // prePoly.render(this.renderProps);
                     break;
                 default:
                     break;
