@@ -1,6 +1,7 @@
 import ShapeEnum from "../enum/ShapeEnum";
 import Vertex from "../object/base/Vertex";
 import Line from "../object/shape/Line";
+import Polygon from "../object/shape/Polygon";
 import Shape from "../object/shape/Shape";
 
 class DrawHandler {
@@ -16,9 +17,12 @@ class DrawHandler {
     public positionBuffer: WebGLBuffer;
     public selectShape: ShapeEnum | null = null;
     public listOfShape: Shape[];
+    public polyCounter = 0;
 
     /** COMPONENT */
     public lineBtn: HTMLElement | null = null;
+
+    public polygonBtn: HTMLElement | null = null;
 
     public constructor(
         gl: WebGLRenderingContext,
@@ -48,12 +52,17 @@ class DrawHandler {
 
     private initComponent() {
         this.lineBtn = this.document.getElementById("line");
+        this.polygonBtn = this.document.getElementById("polygon");
     }
 
     private btnListener() {
         this.lineBtn?.addEventListener("click", () => {
             this.onDraw = false;
             this.selectShape = ShapeEnum.LINE;
+        });
+        this.polygonBtn?.addEventListener("click", () => {
+            this.onDraw = false;
+            this.selectShape = ShapeEnum.POLYGON;
         });
     }
 
@@ -80,6 +89,29 @@ class DrawHandler {
                         this.onDraw = false;
                     }
                     break;
+                case ShapeEnum.POLYGON:
+                    if (!this.onDraw) {
+                        const poly = new Polygon(this.listOfShape.length);
+                        poly.addVertex(point);
+                        this.listOfShape.push(poly);
+                        ++this.polyCounter;
+                        console.log(this.polyCounter);
+
+                        this.onDraw = true;
+                    } else {
+                        const prePoly = this.listOfShape[
+                            this.listOfShape.length - 1
+                        ] as Polygon;
+                        prePoly.addVertex(point);
+                        ++this.polyCounter;
+                        console.log(this.polyCounter);
+                        if(this.polyCounter > 2){
+                            prePoly.setPosition(this.renderProps.gl);
+                            prePoly.render(this.renderProps);
+                        } 
+                    }
+                    break;
+
 
                 default:
                     break;
@@ -100,7 +132,13 @@ class DrawHandler {
                     preLine.setVertex(point, 2);
                     preLine.render(this.renderProps);
                     break;
-
+                
+                case ShapeEnum.POLYGON:
+                    // const prePoly = this.listOfShape[
+                    //     this.listOfShape.length - 1
+                    // ] as Polygon;
+                    // prePoly.render(this.renderProps);
+                    break;
                 default:
                     break;
             }
@@ -111,6 +149,7 @@ class DrawHandler {
         for (let i = 0; i < this.listOfShape.length; i++) {
             this.listOfShape[i].render(this.renderProps);
         }
+  
 
         window.requestAnimationFrame(this.rerender);
     };
