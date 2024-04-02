@@ -22,29 +22,15 @@ abstract class Shape {
     public abstract getGLType(gl: WebGLRenderingContext): number;
     public abstract setVertex(vertex: Vertex, index: number): void;
 
-    public render(render: RenderProps) {
-        if (!this.isNullVertex()) {
-            return;
-        }
+    public positionProc({ gl, program, positionBuffer }: RenderProps) {
+        const positionLoc = gl.getAttribLocation(program, "a_position");
+        gl.enableVertexAttribArray(positionLoc);
+        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+        this.setPosition(gl);
+        gl.vertexAttribPointer(positionLoc, 2, gl.FLOAT, false, 0, 0);
+    }
 
-        /** Position */
-        const positionLoc = render.gl.getAttribLocation(
-            render.program,
-            "a_position"
-        );
-        render.gl.enableVertexAttribArray(positionLoc);
-        render.gl.bindBuffer(render.gl.ARRAY_BUFFER, render.positionBuffer);
-        this.setPosition(render.gl);
-        render.gl.vertexAttribPointer(
-            positionLoc,
-            2,
-            render.gl.FLOAT,
-            false,
-            0,
-            0
-        );
-
-        /** Color */
+    public colorProc({ gl, program, colorBuffer }: RenderProps) {
         // const colorLoc = render.gl.getAttribLocation(render.program, "a_color");
         // render.gl.enableVertexAttribArray(colorLoc);
         // render.gl.bindBuffer(render.gl.ARRAY_BUFFER, render.colorBuffer);
@@ -57,35 +43,39 @@ abstract class Shape {
         //     0,
         //     0
         // );
+    }
 
+    public matrixProc({ gl, program }: RenderProps) {
         const centroid = this.centroid();
 
         const mat = this.transform
-            .projectionMat(render.gl.canvas.width, render.gl.canvas.height)
+            .projectionMat(gl.canvas.width, gl.canvas.height)
             .multiply(this.transform.translationMat())
             .multiply(this.transform.inputTransMat(centroid[0], centroid[1]))
             .multiply(this.transform.rotationMat())
             .multiply(this.transform.scaleMat())
             .multiply(this.transform.inputTransMat(-centroid[0], -centroid[1]));
 
-        const matrixLoc = render.gl.getUniformLocation(
-            render.program,
-            "u_matrix"
-        );
+        const matrixLoc = gl.getUniformLocation(program, "u_matrix");
 
-        render.gl.uniformMatrix3fv(matrixLoc, false, mat.toArray());
+        gl.uniformMatrix3fv(matrixLoc, false, mat.toArray());
+    }
 
-        const primitive = this.getGLType(render.gl);
+    public drawProc({ gl }: RenderProps) {
+        const primitive = this.getGLType(gl);
         const offset = 0;
         const count = this.countVertex();
 
-        render.gl.drawArrays(primitive, offset, count);
+        gl.drawArrays(primitive, offset, count);
     }
 
-    // public abstract perfectShape(): boolean;
-    // public abstract deletePoint(index: number): void;
-    // public abstract method(gl: WebGLRenderingContext): number;
-    // public abstract count(): number;
+    public render(r: RenderProps) {
+        if (!this.isNullVertex()) return;
+        this.positionProc(r);
+        this.colorProc(r);
+        this.matrixProc(r);
+        this.drawProc(r);
+    }
 }
 
 export default Shape;

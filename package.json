@@ -5,12 +5,13 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "dev": "npx webpack --watch",
+        "dev": "concurrently \"npx webpack --watch\" \"live-server\"",
         "build": "npx webpack"
     },
     "author": "",
     "license": "ISC",
     "devDependencies": {
+        "concurrently": "^8.2.2",
         "ts-loader": "^9.5.1",
         "typescript": "^5.4.2",
         "webpack": "^5.90.3",
