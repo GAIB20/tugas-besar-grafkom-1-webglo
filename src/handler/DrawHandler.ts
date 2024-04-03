@@ -2,6 +2,7 @@ import ShapeEnum from "../enum/ShapeEnum";
 import Vertex from "../object/base/Vertex";
 import Line from "../object/shape/Line";
 import Polygon from "../object/shape/Polygon";
+import Square from "../object/shape/Square";
 import Shape from "../object/shape/Shape";
 
 class DrawHandler {
@@ -21,7 +22,7 @@ class DrawHandler {
 
     /** COMPONENT */
     public lineBtn: HTMLElement | null = null;
-
+    public squareBtn: HTMLElement | null = null;
     public polygonBtn: HTMLElement | null = null;
 
     public constructor(
@@ -53,6 +54,7 @@ class DrawHandler {
     private initComponent() {
         this.lineBtn = this.document.getElementById("line");
         this.polygonBtn = this.document.getElementById("polygon");
+        this.squareBtn = this.document.getElementById("square");
     }
 
     private btnListener() {
@@ -63,6 +65,10 @@ class DrawHandler {
         this.polygonBtn?.addEventListener("click", () => {
             this.onDraw = false;
             this.selectShape = ShapeEnum.POLYGON;
+        });
+        this.squareBtn?.addEventListener("click", () => {
+            this.onDraw = false;
+            this.selectShape = ShapeEnum.SQUARE;
         });
     }
 
@@ -109,7 +115,22 @@ class DrawHandler {
                         } 
                     }
                     break;
-
+                case ShapeEnum.SQUARE:
+                    if(!this.onDraw){
+                        const square = new Square(this.listOfShape.length, point);
+                        this.listOfShape.push(square);
+                        this.onDraw = true;
+                    }
+                    else{
+                        const preSquare = this.listOfShape[
+                            this.listOfShape.length - 1
+                        ] as Square;
+                        preSquare.setVertex(point, 0);
+                        preSquare.setPosition(this.renderProps.gl);
+                        preSquare.render(this.renderProps);
+                        this.onDraw = false;
+                    }
+                    break;
 
                 default:
                     break;
@@ -132,6 +153,14 @@ class DrawHandler {
                     break;
                 
                 case ShapeEnum.POLYGON:
+                    break;
+                case ShapeEnum.SQUARE:
+                    const preSquare = this.listOfShape[
+                        this.listOfShape.length - 1
+                    ] as Square;
+                    preSquare.setVertex(point, 0);
+                    preSquare.setPosition(this.renderProps.gl);
+                    preSquare.render(this.renderProps);
                     break;
                 default:
                     break;
