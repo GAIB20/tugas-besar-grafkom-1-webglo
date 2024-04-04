@@ -83,6 +83,10 @@ class Rectangle extends Shape {
         return 6;
     }
 
+    public countRealVertex(): number {
+        return 4;
+    }
+
     public centroid(): [number, number] {
         if (this.p0 && this.p2) {
             const centroidX = (this.p0.coor.x + this.p2.coor.x) / 2;

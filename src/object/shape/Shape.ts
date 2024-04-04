@@ -18,6 +18,7 @@ abstract class Shape {
     public abstract setColor(gl: WebGLRenderingContext): void;
     public abstract isNullVertex(): boolean;
     public abstract countVertex(): number;
+    public abstract countRealVertex(): number;
     public abstract centroid(): [number, number];
     public abstract getGLType(gl: WebGLRenderingContext): number;
     public abstract setVertex(vertex: Vertex, index: number): void;

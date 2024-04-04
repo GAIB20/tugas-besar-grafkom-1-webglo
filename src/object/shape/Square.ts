@@ -106,6 +106,10 @@ class Square extends Shape {
         return 6;
     }
 
+    public countRealVertex(): number {
+        return 4;
+    }
+
     public centroid(): [number, number] {
         return [this.the_centroid.coor.x, this.the_centroid.coor.y];
     }

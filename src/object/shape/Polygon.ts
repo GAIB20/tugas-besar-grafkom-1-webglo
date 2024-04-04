@@ -62,7 +62,9 @@ class Polygon extends Shape{
         
         if(this.points.length >= 3){
             // perform convex hull
-            this.convexHull(vertex);
+            let currentPoints : Vertex[] = this.getRealVertices();
+            currentPoints.push(vertex);
+            this.convexHull(currentPoints);
         }
         else{
             this.points.push(vertex);
@@ -71,8 +73,31 @@ class Polygon extends Shape{
         
     }
 
+    public removeVertex(index: number): void {
+        let realVertices = this.getRealVertices();
+        // delete the realVertices[index]
+        realVertices.splice(index, 1);
+        this.convexHull(realVertices);
+    }
+
     public countVertex(): number {
         return this.points.length;
+    }
+
+    public countRealVertex(): number {
+        return 2 + this.points.length/3;
+    }
+
+    public getRealVertices(): Vertex[] {
+        let currentPoints : Vertex[] = [];
+        for(let i = 0; i < this.points.length; i++){
+
+            //evaluate by "if" condition because points buffer is triangle (multiple of 3)
+            if(i < 3 || (i >=3 && i % 3 == 2)){
+                currentPoints.push(_.cloneDeep(this.points[i]));
+            }
+        }
+        return currentPoints;
     }
 
     public centroid(): [number, number] {
@@ -89,45 +114,35 @@ class Polygon extends Shape{
     /**
      * Update this.points by adding the new vertex
      */
-    public convexHull(vertex: Vertex): void{
+    public convexHull(vertices: Vertex[]): void{
 
         /**
          * Preprocess the points to get the current points
          */
-        let currentPoints : Vertex[] = [];
-
-        //push first 3 points, and then the rest with i mod 3 == 2
-        for(let i = 0; i < this.points.length; i++){
-
-            //evaluate by "if" condition because points buffer is triangle (multiple of 3)
-            if(i < 3 || (i >=3 && i % 3 == 2)){
-                currentPoints.push(_.cloneDeep(this.points[i]));
-            }
-        }
-        currentPoints.push(vertex);
+        
    
-        this.polygonYQuickSort(currentPoints);
+        this.polygonYQuickSort(vertices);
 
 
 
 
-        const reference = currentPoints[0];
-        //first sort, currentPoints[0] is the reference, the rest is sorted based on the angle
-        this.polygonAngleQuickSort(currentPoints, reference);
+        const reference = vertices[0];
+        //first sort, vertices[0] is the reference, the rest is sorted based on the angle
+        this.polygonAngleQuickSort(vertices, reference);
 
         /**
          * Do the convex hull algorithm here, output : the convex hull of the current points
          */
 
         let S = [];
-        S.push(currentPoints[0]);
-        S.push(currentPoints[1]);
-        S.push(currentPoints[2]);
-        for(let i = 3; i < currentPoints.length; i++){
+        S.push(vertices[0]);
+        S.push(vertices[1]);
+        S.push(vertices[2]);
+        for(let i = 3; i < vertices.length; i++){
             while(S.length >= 2){
                 const p1 = S[S.length-2];
                 const p2 = S[S.length-1];
-                const p3 = currentPoints[i];
+                const p3 = vertices[i];
                 const vec1 = new Vector2D(p1.coor, p2.coor);
                 const vec2 = new Vector2D(p2.coor, p3.coor);
                 const cross = vec1.cross(vec2);
@@ -138,7 +153,7 @@ class Polygon extends Shape{
                     break;
                 }
             }
-            S.push(currentPoints[i]);
+            S.push(vertices[i]);
         }
 
         // clear the points

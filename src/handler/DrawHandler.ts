@@ -45,6 +45,7 @@ class DrawHandler {
         this.colorBuffer = gl.createBuffer() as WebGLBuffer;
         this.positionBuffer = gl.createBuffer() as WebGLBuffer;
         this.toolsHandler = new ToolsHandler();
+       
 
         this.renderProps = {
             gl,
@@ -52,6 +53,8 @@ class DrawHandler {
             positionBuffer: this.positionBuffer,
             colorBuffer: this.colorBuffer,
         };
+
+        this.toolsHandler.polygonHandler.setRenderProps(this.renderProps);
 
         this.document.addEventListener("DOMContentLoaded", this.rerender);
         this.initComponent();
@@ -111,7 +114,7 @@ class DrawHandler {
         this.selectedIdxShape = 0;
         this.toolsHandler.enable();
         this.toolsHandler.setShape(this.listOfShape[0]);
-        this.toolsHandler.init();
+        this.toolsHandler.initHTML();
 
     }
 
@@ -140,6 +143,7 @@ class DrawHandler {
                 [event.clientX, event.clientY, 0],
                 [0, 0, 0, 1]
             );
+        if(!this.toolsHandler.polygonHandler.isAddPoint){
             switch (this.selectShape) {
                 case ShapeEnum.LINE:
                     if (!this.onDraw) {
@@ -173,7 +177,6 @@ class DrawHandler {
                         prePoly.addVertex(point);
                         ++this.polyCounter;
                         if(this.polyCounter > 2){
-                            console.log(prePoly.points)
                             prePoly.setPosition(this.renderProps.gl);
                             prePoly.setColor(this.renderProps.gl);
                             prePoly.render(this.renderProps);
@@ -221,6 +224,7 @@ class DrawHandler {
                 default:
                     break;
             }
+        }
         });
 
         this.canvas.addEventListener("mouseup", (event: MouseEvent) => {
