@@ -71,23 +71,39 @@ body {
     padding-left: 1rem;
 }
 
-.second-tools{
+.special-tools{
     padding-left: 1.5rem;
-    padding-top: 1rem;
     display: flex;
     flex-direction: column;
 }
 
-.third-tools{
+.translate-tools{
     padding-left: 1.5rem;
-    padding-top: 1rem;
     display: flex;
     flex-direction: column;
 }
 
+.rotation-tool{
+    padding-left: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
 
 .shape-list{
     width: 15vw;
+    border-radius: 2px;
+}
+
+.points-container{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    right: 5%;
+    padding-top: 2.5rem;
+}
+
+.points-input{
+    width: 5vw;
     border-radius: 2px;
 }
 

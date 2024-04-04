@@ -25,6 +25,7 @@ class Line extends Shape {
             gl.STATIC_DRAW
         );
     }
+
     public setColor(gl: WebGLRenderingContext): void {
        gl.bufferData( gl.ARRAY_BUFFER,
         new Float32Array([
