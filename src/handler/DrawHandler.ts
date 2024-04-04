@@ -3,6 +3,7 @@ import Vertex from "../object/base/Vertex";
 import Line from "../object/shape/Line";
 import Polygon from "../object/shape/Polygon";
 import Square from "../object/shape/Square";
+import Rectangle from "../object/shape/Rectangle";
 import Shape from "../object/shape/Shape";
 import ToolsHandler from "./ToolsHandler";
 
@@ -28,6 +29,7 @@ class DrawHandler {
     public lineBtn: HTMLElement | null = null;
     public squareBtn: HTMLElement | null = null;
     public polygonBtn: HTMLElement | null = null;
+    public rectangleBtn: HTMLElement | null = null;
     public toolsHandler: ToolsHandler;
 
     public constructor(
@@ -61,6 +63,7 @@ class DrawHandler {
         this.lineBtn = this.document.getElementById("line");
         this.polygonBtn = this.document.getElementById("polygon");
         this.squareBtn = this.document.getElementById("square");
+        this.rectangleBtn = this.document.getElementById("rectangle");
         this.initTools()
     }
 
@@ -124,6 +127,10 @@ class DrawHandler {
         this.squareBtn?.addEventListener("click", () => {
             this.onDraw = false;
             this.selectShape = ShapeEnum.SQUARE;
+        });
+        this.rectangleBtn?.addEventListener("click", () => {
+            this.onDraw = false;
+            this.selectShape = ShapeEnum.RECTANGLE;
         });
     }
 
@@ -195,7 +202,22 @@ class DrawHandler {
                         this.updateShapeList()
                     }
                     break;
-
+                case ShapeEnum.RECTANGLE:
+                    if (!this.onDraw) {
+                        const rectangle = new Rectangle(this.listOfShape.length, point);
+                        this.listOfShape.push(rectangle);
+                        this.onDraw = true;
+                    } else {
+                        const preRectangle = this.listOfShape[
+                            this.listOfShape.length - 1
+                        ] as Rectangle;
+                        preRectangle.setVertex(point, 0);
+                        preRectangle.setPosition(this.renderProps.gl);
+                        preRectangle.render(this.renderProps);
+                        this.onDraw = false;
+                        this.updateShapeList()
+                    }
+                    break;
                 default:
                     break;
             }
@@ -211,6 +233,8 @@ class DrawHandler {
                     }
                     break;
                 case ShapeEnum.SQUARE:
+                    break;
+                case ShapeEnum.RECTANGLE:
                     break;
                 default:
                     break;
@@ -242,6 +266,14 @@ class DrawHandler {
                     preSquare.setVertex(point, 0);
                     preSquare.setPosition(this.renderProps.gl);
                     preSquare.render(this.renderProps);
+                    break;
+                case ShapeEnum.RECTANGLE:
+                    const preRectangle = this.listOfShape[
+                        this.listOfShape.length - 1
+                    ] as Rectangle;
+                    preRectangle.setVertex(point, 0);
+                    preRectangle.setPosition(this.renderProps.gl);
+                    preRectangle.render(this.renderProps);
                     break;
                 default:
                     break;
