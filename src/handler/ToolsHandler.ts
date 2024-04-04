@@ -2,6 +2,7 @@
  * Implementation of toolshandler, including changing color, transform, etc.
 */
 import Shape from "../object/shape/Shape";
+import ShapeEnum from "../enum/ShapeEnum";
 import { hexToRgb } from "../utils/algorithm";
 
 
@@ -39,13 +40,20 @@ export default class ToolsHandler{
         // add color picker into the first tool container
         firstToolContainer?.appendChild(title);
         firstToolContainer?.appendChild(colorPicker);
+        this.specialMethod()
+        this.generalMethod()
+        
 
+        
+    }
+
+    private generalMethod(): void{
         /**
          * FOR TRANSLATION
          */
-        let secondToolContainer = this.document.createElement("div");
-        secondToolContainer.id = "second-tool"
-        secondToolContainer.className = "second-tools";
+        let translateContainer = this.document.createElement("div");
+        translateContainer.id = "translate-tools"
+        translateContainer.className = "translate-tools";
 
         let translateXLabel = this.document.createElement("label");
         translateXLabel.innerHTML = "Translate X: ";
@@ -68,6 +76,10 @@ export default class ToolsHandler{
         translateXValue.id = "translateXLabel";
         translateXValue.innerHTML = "0";
         
+        let translateXInputValue = this.document.createElement("span");
+        translateXInputValue.appendChild(translateXInput);
+        translateXInputValue.appendChild(translateXValue);
+        
         let translateYLabel = this.document.createElement("label");
         translateYLabel.innerHTML = "Translate Y: ";
         let translateYInput = this.document.createElement("input");
@@ -88,23 +100,24 @@ export default class ToolsHandler{
         let translateYValue = this.document.createElement("span");
         translateYValue.innerHTML = "0";
         translateYValue.id = "translateYLabel";
+        let translateYInputValue = this.document.createElement("span");
+        translateYInputValue.appendChild(translateYInput);
+        translateYInputValue.appendChild(translateYValue);
 
         //append
-        secondToolContainer.appendChild(translateXLabel);
-        secondToolContainer.appendChild(translateXInput);
-        secondToolContainer.appendChild(translateXValue);
-        secondToolContainer.appendChild(translateYLabel);
-        secondToolContainer.appendChild(translateYInput);
-        secondToolContainer.appendChild(translateYValue);
+        translateContainer.appendChild(translateXLabel);
+        translateContainer.appendChild(translateXInputValue);
+        translateContainer.appendChild(translateYLabel);
+        translateContainer.appendChild(translateYInputValue);
 
         //search for the tools
         let tools = this.document.getElementById("tools");
-        tools?.appendChild(secondToolContainer);
+        tools?.appendChild(translateContainer);
 
         /** FOR ROTATION */
-        let thirdToolContainer = this.document.createElement("div");
-        thirdToolContainer.id = "third-tool"
-        thirdToolContainer.className = "third-tools";
+        let rotationContainer = this.document.createElement("div");
+        rotationContainer.id = "rotation-tool"
+        rotationContainer.className = "rotation-tool";
 
         let rotateLabel = this.document.createElement("label");
         rotateLabel.innerHTML = "Rotate: ";
@@ -126,16 +139,260 @@ export default class ToolsHandler{
         let rotateValue = this.document.createElement("span");
         rotateValue.innerHTML = "0";
         rotateValue.id = "rotateLabel";
+        let rotateInputValue = this.document.createElement("span");
+        rotateInputValue.appendChild(rotateInput);
+        rotateInputValue.appendChild(rotateValue);
 
         //append
-        thirdToolContainer.appendChild(rotateLabel);
-        thirdToolContainer.appendChild(rotateInput);
-        thirdToolContainer.appendChild(rotateValue);
-        tools?.appendChild(thirdToolContainer);
+        rotationContainer.appendChild(rotateLabel);
+        rotationContainer.appendChild(rotateInputValue);
+        tools?.appendChild(rotationContainer);
+
+        //points
+        let pointsContainer = this.document.createElement("div");
+        pointsContainer.id = "points-container";
+        pointsContainer.className = "points-container";
+
+        let pointsLabel = this.document.createElement("label");
+        pointsLabel.innerHTML = "Points: ";
+        let pointsInput = this.document.createElement("select");
+        pointsInput.id = "points";
+        pointsInput.className = "points-input";
+
+
+        //add points to the container
+        pointsContainer.appendChild(pointsLabel);
+        pointsContainer.appendChild(pointsInput);
+
+        tools?.appendChild(pointsContainer);
+
     }
 
+    private specialMethod(): void{
+        let specialContainer = this.document.createElement("div");
+        specialContainer.id = "special-tools";
+        specialContainer.className = "special-tools";
+        switch(this.selectedShape?.shape){
+            case ShapeEnum.POLYGON:
+                this.polygonMethod(specialContainer);
+                break;
+            case ShapeEnum.SQUARE:
+                this.squareMethod(specialContainer);
+                break;
+            case ShapeEnum.LINE:
+                this.lineMethod(specialContainer);
+                break;
+            case ShapeEnum.RECTANGLE:
+                this.rectangleMethod(specialContainer);
+                break;
+            default:
+                break;
+        }
+        let tools = this.document.getElementById("tools");
+        tools?.appendChild(specialContainer);
+    }
+
+    private polygonMethod(container : HTMLDivElement): void{
+        
+        let sliderPointXLabel = this.document.createElement("label");
+        sliderPointXLabel.innerHTML = "Slider P-X: ";
+        let sliderPointXInput = this.document.createElement("input");
+        sliderPointXInput.type = "range";
+        sliderPointXInput.id = "sliderPointX";
+        sliderPointXInput.className = "slider-input";
+        sliderPointXInput.value = "0";
+        sliderPointXInput.min = "-100";
+        sliderPointXInput.max = "100";
+        sliderPointXInput.addEventListener("input", (event: Event) => {
+            let target = event.target as HTMLInputElement;
+            let value = target.value;
+            let valueSpan = this.document.getElementById("SliderPointXLabel");
+            if(valueSpan){
+                valueSpan.innerHTML = value;
+            }
+        });
+        let sliderPointXValue = this.document.createElement("span");
+        sliderPointXValue.innerHTML = "0";
+        sliderPointXValue.id = "SliderPointXLabel";
+        let sliderPointXInputValue = this.document.createElement("span");
+        sliderPointXInputValue.appendChild(sliderPointXInput);
+        sliderPointXInputValue.appendChild(sliderPointXValue);
+
+        container.appendChild(sliderPointXLabel);
+        container.appendChild(sliderPointXInputValue);
+
+        let sliderPointYLabel = this.document.createElement("label");
+        sliderPointYLabel.innerHTML = "Slider P-Y: ";
+        let sliderPointYInput = this.document.createElement("input");
+        sliderPointYInput.type = "range";
+        sliderPointYInput.id = "sliderPointY";
+        sliderPointYInput.className = "slider-input";
+        sliderPointYInput.value = "0";
+        sliderPointYInput.min = "-100";
+        sliderPointYInput.max = "100";
+        sliderPointYInput.addEventListener("input", (event: Event) => {
+            let target = event.target as HTMLInputElement;
+            let value = target.value;
+            let valueSpan = this.document.getElementById("SliderPointYLabel");
+            if(valueSpan){
+                valueSpan.innerHTML = value;
+            }
+        });
+        let sliderPointYValue = this.document.createElement("span");
+        sliderPointYValue.innerHTML = "0";
+        sliderPointYValue.id = "SliderPointYLabel";
+        let sliderPointYInputValue = this.document.createElement("span");
+        sliderPointYInputValue.appendChild(sliderPointYInput);
+        sliderPointYInputValue.appendChild(sliderPointYValue);
+
+        container.appendChild(sliderPointYLabel);
+        container.appendChild(sliderPointYInputValue);
+        
+    }
+
+    private squareMethod(container : HTMLDivElement): void{
+        let sliderScaleLabel = this.document.createElement("label");
+        sliderScaleLabel.innerHTML = "Slider Scale: ";
+        let sliderScaleInput = this.document.createElement("input");
+        sliderScaleInput.type = "range";
+        sliderScaleInput.id = "sliderScale";
+        sliderScaleInput.className = "slider-input";
+        sliderScaleInput.value = "0";
+        sliderScaleInput.min = "-100";
+        sliderScaleInput.max = "100";
+        sliderScaleInput.addEventListener("input", (event: Event) => {
+            let target = event.target as HTMLInputElement;
+            let value = target.value;
+            let valueSpan = this.document.getElementById("SliderScaleLabel");
+            if(valueSpan){
+                valueSpan.innerHTML = value;
+            }
+        });
+        let sliderScaleValue = this.document.createElement("span");
+        sliderScaleValue.innerHTML = "0";
+        sliderScaleValue.id = "SliderScaleLabel";
+        let sliderScaleInputValue = this.document.createElement("span");
+        sliderScaleInputValue.appendChild(sliderScaleInput);
+        sliderScaleInputValue.appendChild(sliderScaleValue);
+
+        container.appendChild(sliderScaleLabel);
+        container.appendChild(sliderScaleInputValue);
+    }
+
+    private lineMethod(container : HTMLDivElement): void{
+        let sliderLengthScaleLabel = this.document.createElement("label");
+        sliderLengthScaleLabel.innerHTML = "Slider Length: ";
+        let sliderLengthScaleInput = this.document.createElement("input");
+        sliderLengthScaleInput.type = "range";
+        sliderLengthScaleInput.id = "sliderLengthScale";
+        sliderLengthScaleInput.className = "slider-input";
+        sliderLengthScaleInput.value = "0";
+        sliderLengthScaleInput.min = "-100";
+        sliderLengthScaleInput.max = "100";
+        sliderLengthScaleInput.addEventListener("input", (event: Event) => {
+            let target = event.target as HTMLInputElement;
+            let value = target.value;
+            let valueSpan = this.document.getElementById("sliderLengthScaleLabel");
+            if(valueSpan){
+                valueSpan.innerHTML = value;
+            }
+        });
+        let sliderLengthScaleValue = this.document.createElement("span");
+        sliderLengthScaleValue.innerHTML = "0";
+        sliderLengthScaleValue.id = "sliderLengthScaleLabel";
+        let sliderLengthScaleInputValue = this.document.createElement("span");
+        sliderLengthScaleInputValue.appendChild(sliderLengthScaleInput);
+        sliderLengthScaleInputValue.appendChild(sliderLengthScaleValue);
+
+        container.appendChild(sliderLengthScaleLabel);
+        container.appendChild(sliderLengthScaleInputValue);
+    }
+
+    private rectangleMethod(container : HTMLDivElement): void{
+        let sliderWidthLabel = this.document.createElement("label");
+        sliderWidthLabel.innerHTML = "Width Scale: ";
+        let sliderWidthInput = this.document.createElement("input");
+        sliderWidthInput.type = "range";
+        sliderWidthInput.id = "sliderWidth";
+        sliderWidthInput.className = "slider-input";
+        sliderWidthInput.value = "0";
+        sliderWidthInput.min = "-100";
+        sliderWidthInput.max = "100";
+        sliderWidthInput.addEventListener("input", (event: Event) => {
+            let target = event.target as HTMLInputElement;
+            let value = target.value;
+            let valueSpan = this.document.getElementById("sliderWidthLabel");
+            if(valueSpan){
+                valueSpan.innerHTML = value;
+            }
+        });
+        let sliderWidthValue = this.document.createElement("span");
+        sliderWidthValue.innerHTML = "0";
+        sliderWidthValue.id = "sliderWidthLabel";
+        let sliderWidthInputValue = this.document.createElement("span");
+        sliderWidthInputValue.appendChild(sliderWidthInput);
+        sliderWidthInputValue.appendChild(sliderWidthValue);
+
+        container.appendChild(sliderWidthLabel);
+        container.appendChild(sliderWidthInputValue);
+
+        let sliderPointYLabel = this.document.createElement("label");
+        sliderPointYLabel.innerHTML = "Slider P-Y: ";
+        let sliderPointYInput = this.document.createElement("input");
+        sliderPointYInput.type = "range";
+        sliderPointYInput.id = "sliderPointY";
+        sliderPointYInput.className = "slider-input";
+        sliderPointYInput.value = "0";
+        sliderPointYInput.min = "-100";
+        sliderPointYInput.max = "100";
+        sliderPointYInput.addEventListener("input", (event: Event) => {
+            let target = event.target as HTMLInputElement;
+            let value = target.value;
+            let valueSpan = this.document.getElementById("SliderPointYLabel");
+            if(valueSpan){
+                valueSpan.innerHTML = value;
+            }
+        });
+        let sliderPointYValue = this.document.createElement("span");
+        sliderPointYValue.innerHTML = "0";
+        sliderPointYValue.id = "SliderPointYLabel";
+        let sliderPointYInputValue = this.document.createElement("span");
+        sliderPointYInputValue.appendChild(sliderPointYInput);
+        sliderPointYInputValue.appendChild(sliderPointYValue);
+
+        container.appendChild(sliderPointYLabel);
+        container.appendChild(sliderPointYInputValue);
+
+    }
+
+    /**
+     * Change shape when shape selector is changed
+     * @param shape 
+     */
     public setShape(shape: Shape): void{
-        this.selectedShape = shape;
+        if(this.selectedShape !== null){
+            this.selectedShape = shape;
+            // delete rotation-tool, translate-tools, special-tools
+            let tools = this.document.getElementById("tools");
+            let rotationTool = this.document.getElementById("rotation-tool");
+            let translateTools = this.document.getElementById("translate-tools");
+            let specialTools = this.document.getElementById("special-tools");
+            if(rotationTool){
+                tools?.removeChild(rotationTool);
+            }
+            if(translateTools){
+                tools?.removeChild(translateTools);
+            }
+            if(specialTools){
+                tools?.removeChild(specialTools);
+            }
+            this.specialMethod();
+            this.generalMethod(); 
+        }
+        else{
+            this.selectedShape = shape;
+        }
+        
     }
 
     public validChange(): boolean{
@@ -144,7 +401,6 @@ export default class ToolsHandler{
 
     public changeColor(value: string): void{
         if(this.validChange()){
-            let colorPicker = this.document.getElementById("colorpicker") as HTMLInputElement;
             this.selectedShape!.changeColor(hexToRgb(value));
         }
     }

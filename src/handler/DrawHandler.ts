@@ -36,7 +36,7 @@ class DrawHandler {
         canvas: HTMLCanvasElement,
         document: Document
     ) {
-        // this.gl = gl;
+        // this.gl = gl; 
         this.canvas = canvas;
         this.document = document;
         this.listOfShape = [];
@@ -107,8 +107,8 @@ class DrawHandler {
     private whenDrawFirstTime(){
         this.selectedIdxShape = 0;
         this.toolsHandler.enable();
-        this.toolsHandler.init();
         this.toolsHandler.setShape(this.listOfShape[0]);
+        this.toolsHandler.init();
 
     }
 
