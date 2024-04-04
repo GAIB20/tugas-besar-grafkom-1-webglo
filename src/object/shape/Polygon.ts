@@ -8,7 +8,7 @@ import { arctan } from "../base/Coordinate";
 import { quickSort } from "../../utils/algorithm";
 
 class Polygon extends Shape{
-    readonly shape: ShapeEnum = ShapeEnum.LINE;
+    readonly shape: ShapeEnum = ShapeEnum.POLYGON;
     public points: Point[];
 
     public constructor(id: number, points: Point[] = []) {

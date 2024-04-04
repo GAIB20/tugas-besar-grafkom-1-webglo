@@ -1,4 +1,4 @@
-import ShapeEnum from "../enum/ShapeEnum";
+import ShapeEnum, {shapeToString} from "../enum/ShapeEnum";
 import Vertex from "../object/base/Vertex";
 import Line from "../object/shape/Line";
 import Polygon from "../object/shape/Polygon";
@@ -55,6 +55,34 @@ class DrawHandler {
         this.lineBtn = this.document.getElementById("line");
         this.polygonBtn = this.document.getElementById("polygon");
         this.squareBtn = this.document.getElementById("square");
+        this.initTools()
+    }
+
+    private initTools(){
+        let tools = this.document.getElementById("tools");
+        let shapeListContainer = this.document.createElement("div");
+        let shapeListLabel = this.document.createElement("h3");
+        shapeListLabel.innerHTML = "List of Shapes:";
+        let shapeList = this.document.createElement("select");
+        shapeList.id = "shapelist";
+        shapeList.className = "shape-list"
+        shapeListContainer.appendChild(shapeListLabel);
+        shapeListContainer.appendChild(shapeList);
+        tools?.appendChild(shapeListContainer);
+    }
+
+    private updateShapeList(){
+        let shapeList = this.document.getElementById("shapelist");
+        if(shapeList){
+            shapeList.innerHTML = "";
+            for(let i = 0; i < this.listOfShape.length; i++){
+                let shape = this.listOfShape[i];
+                let option = this.document.createElement("option");
+                option.value = i.toString();
+                option.text = shapeToString(shape.shape) + "_" + (i < 10 ? "0" : "") + i.toString();
+                shapeList.appendChild(option);
+            }
+        }
     }
 
     private btnListener() {
@@ -93,6 +121,7 @@ class DrawHandler {
                         preLine.render(this.renderProps);
 
                         this.onDraw = false;
+                        this.updateShapeList()
                     }
                     break;
                 case ShapeEnum.POLYGON:
@@ -129,6 +158,7 @@ class DrawHandler {
                         preSquare.setPosition(this.renderProps.gl);
                         preSquare.render(this.renderProps);
                         this.onDraw = false;
+                        this.updateShapeList()
                     }
                     break;
 
@@ -136,6 +166,24 @@ class DrawHandler {
                     break;
             }
         });
+
+        this.canvas.addEventListener("dblclick", (event: MouseEvent) => {
+            switch(this.selectShape){
+                case ShapeEnum.POLYGON:
+                    if(!this.onDraw) break;
+                    const prePoly = this.listOfShape[
+                        this.listOfShape.length - 1
+                    ] as Polygon;
+                    prePoly.setPosition(this.renderProps.gl);
+                    prePoly.render(this.renderProps);
+                    this.onDraw = false;
+                    this.updateShapeList()
+                    break;
+                default:
+                    break;
+            }
+        });
+
 
         this.canvas.addEventListener("mousemove", (event: MouseEvent) => {
             if (!this.onDraw) return;

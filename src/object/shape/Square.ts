@@ -10,7 +10,7 @@ import VertexOperation from "../../math/VertexOperation";
 // import { quickSort } from "../../utils/algorithm";
 
 class Square extends Shape{
-    readonly shape: ShapeEnum = ShapeEnum.LINE;
+    readonly shape: ShapeEnum = ShapeEnum.SQUARE;
     public the_centroid: Point;
     public p0 : Point | null;
     public p1 : Point | null;
