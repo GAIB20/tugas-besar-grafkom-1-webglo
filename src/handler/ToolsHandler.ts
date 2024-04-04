@@ -40,14 +40,14 @@ export default class ToolsHandler{
         // add color picker into the first tool container
         firstToolContainer?.appendChild(title);
         firstToolContainer?.appendChild(colorPicker);
-        this.specialMethod()
-        this.generalMethod()
+        this.specialMethodHTML()
+        this.generalMethodHTML()
         
 
         
     }
 
-    private generalMethod(): void{
+    private generalMethodHTML(): void{
         /**
          * FOR TRANSLATION
          */
@@ -62,8 +62,8 @@ export default class ToolsHandler{
         translateXInput.id = "translateX";  
         translateXInput.className = "translate-input";
         translateXInput.value = "0";
-        translateXInput.min = "-100";
-        translateXInput.max = "100";
+        translateXInput.min = "-200";
+        translateXInput.max = "200";
         translateXInput.addEventListener("input", (event: Event) => {
             let target = event.target as HTMLInputElement;
             let value = target.value;
@@ -71,6 +71,7 @@ export default class ToolsHandler{
             if(valueSpan){
                 valueSpan.innerHTML = value;
             }
+            this.translateX(parseInt(value));
         });
         let translateXValue = this.document.createElement("span");
         translateXValue.id = "translateXLabel";
@@ -87,8 +88,8 @@ export default class ToolsHandler{
         translateYInput.id = "translateY";
         translateYInput.className = "translate-input";
         translateYInput.value = "0";
-        translateYInput.min = "-100";
-        translateYInput.max = "100";
+        translateYInput.min = "-200";
+        translateYInput.max = "200";
         translateYInput.addEventListener("input", (event: Event) => {
             let target = event.target as HTMLInputElement;
             let value = target.value;
@@ -96,6 +97,7 @@ export default class ToolsHandler{
             if(valueSpan){
                 valueSpan.innerHTML = value;
             }
+            this.translateY(parseInt(value));
         });
         let translateYValue = this.document.createElement("span");
         translateYValue.innerHTML = "0";
@@ -135,6 +137,7 @@ export default class ToolsHandler{
             if(valueSpan){
                 valueSpan.innerHTML = value;
             }
+            this.rotate(parseInt(value));    
         });
         let rotateValue = this.document.createElement("span");
         rotateValue.innerHTML = "0";
@@ -168,7 +171,7 @@ export default class ToolsHandler{
 
     }
 
-    private specialMethod(): void{
+    private specialMethodHTML(): void{
         let specialContainer = this.document.createElement("div");
         specialContainer.id = "special-tools";
         specialContainer.className = "special-tools";
@@ -386,8 +389,8 @@ export default class ToolsHandler{
             if(specialTools){
                 tools?.removeChild(specialTools);
             }
-            this.specialMethod();
-            this.generalMethod(); 
+            this.specialMethodHTML();
+            this.generalMethodHTML(); 
         }
         else{
             this.selectedShape = shape;
@@ -402,6 +405,25 @@ export default class ToolsHandler{
     public changeColor(value: string): void{
         if(this.validChange()){
             this.selectedShape!.changeColor(hexToRgb(value));
+        }
+    }
+
+    public translateX(value: number): void{
+        console.log("translateX")
+        if(this.validChange()){
+            this.selectedShape!.transform.translateX(value);
+        }
+    }
+
+    public translateY(value: number): void{
+        if(this.validChange()){
+            this.selectedShape!.transform.translateY(value);
+        }
+    }
+
+    public rotate(value: number): void{
+        if(this.validChange()){
+            this.selectedShape!.transform.rotation(value);
         }
     }
 }
