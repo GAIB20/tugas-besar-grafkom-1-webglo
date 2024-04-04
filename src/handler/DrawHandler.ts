@@ -131,7 +131,7 @@ class DrawHandler {
         this.canvas.addEventListener("mousedown", (event: MouseEvent) => {
             const point = new Vertex(
                 [event.clientX, event.clientY, 0],
-                [0, 0, 0, 0]
+                [0, 0, 0, 1]
             );
             switch (this.selectShape) {
                 case ShapeEnum.LINE:
@@ -166,7 +166,9 @@ class DrawHandler {
                         prePoly.addVertex(point);
                         ++this.polyCounter;
                         if(this.polyCounter > 2){
+                            console.log(prePoly.points)
                             prePoly.setPosition(this.renderProps.gl);
+                            prePoly.setColor(this.renderProps.gl);
                             prePoly.render(this.renderProps);
                             this.polyDrawTimeout = setTimeout(() => {
                                 this.onDraw = false;
@@ -220,7 +222,7 @@ class DrawHandler {
             if (!this.onDraw) return;
             const point = new Vertex(
                 [event.clientX, event.clientY, 0],
-                [0, 0, 0, 0]
+                [0, 0, 0, 1]
             );
             switch (this.selectShape) {
                 case ShapeEnum.LINE:

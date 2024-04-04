@@ -21,6 +21,7 @@ abstract class Shape {
     public abstract centroid(): [number, number];
     public abstract getGLType(gl: WebGLRenderingContext): number;
     public abstract setVertex(vertex: Vertex, index: number): void;
+    public abstract changeColor(color: [number, number, number, number]): void;
 
     public render(render: RenderProps) {
         if (!this.isNullVertex()) {

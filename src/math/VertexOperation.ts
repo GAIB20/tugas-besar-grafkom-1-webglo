@@ -11,7 +11,7 @@ class VertexOperation{
      * @param p2 
      */
     public static minusP(p1 : Vertex, p2: Vertex) : Vertex{
-        return new Vertex([p1.coor.x - p2.coor.x, p1.coor.y - p2.coor.y, 0], [0,0,0,0]);    
+        return new Vertex([p1.coor.x - p2.coor.x, p1.coor.y - p2.coor.y, 0], [0,0,0,1]);    
     }
 
     public static addP(p1 : Vertex, v1: Vertex) : Vertex{

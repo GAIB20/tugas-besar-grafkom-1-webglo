@@ -2,6 +2,7 @@
  * Implementation of toolshandler, including changing color, transform, etc.
 */
 import Shape from "../object/shape/Shape";
+import { hexToRgb } from "../utils/algorithm";
 
 
 export default class ToolsHandler{
@@ -144,7 +145,7 @@ export default class ToolsHandler{
     public changeColor(value: string): void{
         if(this.validChange()){
             let colorPicker = this.document.getElementById("colorpicker") as HTMLInputElement;
-          
+            this.selectedShape!.changeColor(hexToRgb(value));
         }
     }
 }

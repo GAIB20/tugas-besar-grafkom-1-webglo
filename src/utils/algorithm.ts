@@ -28,3 +28,11 @@ export function quickSort(arr : any[], predicated : (a: any) => number) : void{
     arr.push(pivot);
     arr.push(...right);
 }
+
+export function hexToRgb(hex: string): [number, number, number, number]{
+    let r = parseInt(hex.substring(1, 3), 16);
+    let g = parseInt(hex.substring(3, 5), 16);
+    let b = parseInt(hex.substring(5, 7), 16);
+
+    return [r/255, g/255, b/255, 1];
+}

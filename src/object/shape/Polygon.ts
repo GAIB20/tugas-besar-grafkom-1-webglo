@@ -29,9 +29,16 @@ class Polygon extends Shape{
 
     public setColor(gl: WebGLRenderingContext): void {
         const colors = this.points.map((point) => point.colorArray()).flat();
-        gl.ARRAY_BUFFER,
-            new Float32Array(colors),
-            gl.STATIC_DRAW;
+       gl.bufferData( gl.ARRAY_BUFFER,
+        new Float32Array(colors),
+        gl.STATIC_DRAW);
+    }
+
+    public changeColor(color: [number, number, number, number]): void {
+        const [r, g, b, a] = color;
+        this.points.forEach((point) => {
+            point.color = { r, g, b, a };
+        });
     }
 
     public isNullVertex(): boolean {

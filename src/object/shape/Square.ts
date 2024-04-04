@@ -86,7 +86,6 @@ class Square extends Shape{
     public setVertex(vertex: Vertex, index: number): void {
         if(index == 0){
             this.p0 = vertex;
-            this.p0.color.a=1;
             
             // set base vector, centroid - p0
             let v2 = VertexOperation.minusP(this.the_centroid, this.p0);
@@ -114,6 +113,20 @@ class Square extends Shape{
     /**
      * Update this.points by adding the new vertex
      */
+    public changeColor(color: [number, number, number, number]): void {
+        if(this.p0 != null){
+            this.p0.color = {r: color[0], g: color[1], b: color[2], a: color[3]};
+        }
+        if(this.p1 != null){
+            this.p1.color = {r: color[0], g: color[1], b: color[2], a: color[3]};
+        }
+        if(this.p2 != null){
+            this.p2.color = {r: color[0], g: color[1], b: color[2], a: color[3]};
+        }
+        if(this.p3 != null){
+            this.p3.color = {r: color[0], g: color[1], b: color[2], a: color[3]};
+        }
+    }
     
 
 }
