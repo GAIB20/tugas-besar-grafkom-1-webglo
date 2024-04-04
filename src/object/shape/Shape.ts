@@ -23,41 +23,21 @@ abstract class Shape {
     public abstract setVertex(vertex: Vertex, index: number): void;
     public abstract changeColor(color: [number, number, number, number]): void;
 
-    public render(render: RenderProps) {
-        if (!this.isNullVertex()) {
-            return;
-        }
+    public positionProc({ gl, program, positionBuffer }: RenderProps) {
+        const positionLoc = gl.getAttribLocation(program, "a_position");
+        gl.enableVertexAttribArray(positionLoc);
+        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+        this.setPosition(gl);
+        gl.vertexAttribPointer(positionLoc, 2, gl.FLOAT, false, 0, 0);
+    }
 
-        /** Position */
-        const positionLoc = render.gl.getAttribLocation(
-            render.program,
-            "a_position"
-        );
-        render.gl.enableVertexAttribArray(positionLoc);
-        render.gl.bindBuffer(render.gl.ARRAY_BUFFER, render.positionBuffer);
-        this.setPosition(render.gl);
-        render.gl.vertexAttribPointer(
-            positionLoc,
-            2,
-            render.gl.FLOAT,
-            false,
-            0,
-            0
-        );
-
-        /** Color */
-        const colorLoc = render.gl.getAttribLocation(render.program, "a_color");
-        render.gl.enableVertexAttribArray(colorLoc);
-        render.gl.bindBuffer(render.gl.ARRAY_BUFFER, render.colorBuffer);
-        this.setColor(render.gl);
-        render.gl.vertexAttribPointer(
-            colorLoc,
-            4,
-            render.gl.FLOAT,
-            false,
-            0,
-            0
-        );
+    public colorProc({ gl, program, colorBuffer }: RenderProps) {
+        const colorLoc = gl.getAttribLocation(program, "a_color");
+        gl.enableVertexAttribArray(colorLoc);
+        gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+        this.setColor(gl);
+        gl.vertexAttribPointer(colorLoc, 4, gl.FLOAT, false, 0, 0);
+    }
 
     public matrixProc({ gl, program }: RenderProps) {
         const centroid = this.centroid();
