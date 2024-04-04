@@ -44,7 +44,7 @@ class DrawHandler {
         this.listOfShape = [];
         this.colorBuffer = gl.createBuffer() as WebGLBuffer;
         this.positionBuffer = gl.createBuffer() as WebGLBuffer;
-        this.toolsHandler = new ToolsHandler();
+        this.toolsHandler = new ToolsHandler(document);
        
 
         this.renderProps = {

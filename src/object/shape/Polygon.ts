@@ -76,8 +76,13 @@ class Polygon extends Shape{
     public removeVertex(index: number): void {
         let realVertices = this.getRealVertices();
         // delete the realVertices[index]
-        realVertices.splice(index, 1);
-        this.convexHull(realVertices);
+        if(this.countRealVertex() > 3){
+            realVertices.splice(index, 1);
+            this.convexHull(realVertices);
+        }
+        else{
+            this.points = [];
+        }
     }
 
     public countVertex(): number {
@@ -85,7 +90,7 @@ class Polygon extends Shape{
     }
 
     public countRealVertex(): number {
-        return 2 + this.points.length/3;
+        return (this.points.length < 3) ? 0 : 2 + this.points.length/3;
     }
 
     public getRealVertices(): Vertex[] {

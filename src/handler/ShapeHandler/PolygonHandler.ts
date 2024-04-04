@@ -3,16 +3,19 @@ import Shape from "../../object/shape/Shape";
 import Polygon from "../../object/shape/Polygon";
 import Vertex from "../../object/base/Vertex";
 import ShapeEnum from "../../enum/ShapeEnum";
+import _ from "lodash"
 
 export default class PolygonHandler {
 
-    private document: Document = document;
+    private document: Document;
     private polygon: Polygon | null = null;
     public renderProps: RenderProps | null = null;
     public isAddPoint: boolean = false;
+    public pivotPoint : Vertex | null = null;
     
 
-    public constructor(){
+    public constructor(document: Document){
+        this.document = document;
         this.HandleAddPoint();
     }
 
@@ -37,6 +40,8 @@ export default class PolygonHandler {
                     this.polygon!.setPosition(this.renderProps!.gl);
                     this.polygon!.setColor(this.renderProps!.gl);
                     this.polygon!.render(this.renderProps!);
+
+                    this.renewPoints();
                 }
             });
         
@@ -51,20 +56,24 @@ export default class PolygonHandler {
             this.polygon!.setColor(this.renderProps!.gl);
             this.polygon!.render(this.renderProps!);
            
-            // reevaluate option
-            currentOpt.innerHTML = "";
+            this.renewPoints();
+            
+        }
+    }
+
+    public renewPoints(): void{
+        let currentOpt = this.document.getElementById("points") as HTMLSelectElement;
+        currentOpt.innerHTML = "";
             let currentPoints = this.polygon!.countRealVertex();
             for(let i = 0; i < currentPoints; i++){
                 let opt = this.document.createElement("option");
                 opt.value = i.toString();
                 opt.innerHTML = (i < 10 ? "0" : "") + i.toString();
                 currentOpt.appendChild(opt);
-            }
-            
-        }
+         }
     }
 
-    public polygonMethod(container : HTMLDivElement): void{
+    public polygonMethodHTML(container : HTMLDivElement): void{
         container.className = "polygon-tools";
         let div1 = this.document.createElement("div");
         div1.className = "div-tools";
@@ -115,6 +124,15 @@ export default class PolygonHandler {
             if(valueSpan){
                 valueSpan.innerHTML = value;
             }
+            let newVertex = _.cloneDeep(this.pivotPoint!);
+            let pointsSelected = parseInt((this.document.getElementById("points") as HTMLSelectElement).value);
+            this.polygon!.removeVertex(pointsSelected);
+            newVertex.coor.x += parseInt(value);
+            this.polygon!.addVertex(newVertex);
+            this.polygon!.setPosition(this.renderProps!.gl);
+            this.polygon!.setColor(this.renderProps!.gl);
+            this.polygon!.render(this.renderProps!);
+            this.renewPoints();
         });
         let sliderPointXValue = this.document.createElement("span");
         sliderPointXValue.innerHTML = "0";
@@ -142,6 +160,16 @@ export default class PolygonHandler {
             if(valueSpan){
                 valueSpan.innerHTML = value;
             }
+
+            let newVertex = _.cloneDeep(this.pivotPoint!);
+            let pointsSelected = parseInt((this.document.getElementById("points") as HTMLSelectElement).value);
+            this.polygon!.removeVertex(pointsSelected);
+            newVertex.coor.y += parseInt(value);
+            this.polygon!.addVertex(newVertex);
+            this.polygon!.setPosition(this.renderProps!.gl);
+            this.polygon!.setColor(this.renderProps!.gl);
+            this.polygon!.render(this.renderProps!);
+            this.renewPoints();
         });
         let sliderPointYValue = this.document.createElement("span");
         sliderPointYValue.innerHTML = "0";
@@ -156,6 +184,25 @@ export default class PolygonHandler {
         container.appendChild(div1);
         container.appendChild(div2);
         
+    }
+
+
+    public handlePointOptionChange() : void{
+        this.pivotPoint = _.cloneDeep(this.polygon!.getRealVertices()[0]);
+        let pointOpt = this.document.getElementById("points") as HTMLSelectElement;
+        pointOpt.addEventListener("change", (event: Event) => {
+            let val = event.target as HTMLSelectElement;
+            let value = parseInt(val.value);
+            this.pivotPoint = _.cloneDeep(this.polygon!.getRealVertices()[value]);
+            let sliderX = this.document.getElementById("sliderPointX") as HTMLInputElement;
+            let sliderY = this.document.getElementById("sliderPointY") as HTMLInputElement;
+            sliderX.value = "0";
+            sliderY.value = "0";
+            let sliderXValue = this.document.getElementById("SliderPointXLabel") as HTMLSpanElement;
+            let sliderYValue = this.document.getElementById("SliderPointYLabel") as HTMLSpanElement;
+            sliderXValue.innerHTML = "0";
+            sliderYValue.innerHTML = "0";
+        });
     }
 
 }

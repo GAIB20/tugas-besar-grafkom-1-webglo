@@ -11,12 +11,13 @@ import Polygon from "../object/shape/Polygon";
 export default class ToolsHandler{
     private enabled: boolean = false;
     private selectedShape : Shape | null = null;
-    private document: Document = document;
+    private document: Document;
     public polygonHandler: PolygonHandler;
 
-    public constructor(){
+    public constructor(document: Document){
         this.enabled = false;
-        this.polygonHandler = new PolygonHandler();
+        this.document = document;
+        this.polygonHandler = new PolygonHandler(this.document);
 
     }
 
@@ -26,6 +27,7 @@ export default class ToolsHandler{
 
     public initHTML(): void{
         //add color picker
+
         let firstToolContainer = this.document.getElementById("first-tool");
 
         let title = this.document.createElement("h3");
@@ -47,9 +49,12 @@ export default class ToolsHandler{
         firstToolContainer?.appendChild(colorPicker);
         this.specialMethodHTML()
         this.generalMethodHTML()
+        this.eventListener();
         
+    }
 
-        
+    public eventListener(): void{
+        this.polygonHandler.handlePointOptionChange();
     }
 
     private generalMethodHTML(): void{
@@ -190,7 +195,7 @@ export default class ToolsHandler{
         switch(this.selectedShape?.shape){
             case ShapeEnum.POLYGON:
                 this.polygonHandler.setPolygon(this.selectedShape! as Polygon)
-                this.polygonHandler.polygonMethod(specialContainer);
+                this.polygonHandler.polygonMethodHTML(specialContainer);
                 break;
             case ShapeEnum.SQUARE:
                 this.squareMethod(specialContainer);
