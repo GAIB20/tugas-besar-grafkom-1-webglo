@@ -67,7 +67,31 @@ body {
     border-radius: 2px;
 }
 
+.first-tools{
+    padding-left: 1rem;
+}
+
+.second-tools{
+    padding-left: 1.5rem;
+    padding-top: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.third-tools{
+    padding-left: 1.5rem;
+    padding-top: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+
 .shape-list{
+    width: 15vw;
+    border-radius: 2px;
+}
+
+.color-picker{
     width: 15vw;
     border-radius: 2px;
 }

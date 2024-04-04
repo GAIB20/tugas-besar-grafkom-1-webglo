@@ -45,18 +45,18 @@ abstract class Shape {
         );
 
         /** Color */
-        // const colorLoc = render.gl.getAttribLocation(render.program, "a_color");
-        // render.gl.enableVertexAttribArray(colorLoc);
-        // render.gl.bindBuffer(render.gl.ARRAY_BUFFER, render.colorBuffer);
-        // this.setColor(render.gl);
-        // render.gl.vertexAttribPointer(
-        //     colorLoc,
-        //     4,
-        //     render.gl.FLOAT,
-        //     false,
-        //     0,
-        //     0
-        // );
+        const colorLoc = render.gl.getAttribLocation(render.program, "a_color");
+        render.gl.enableVertexAttribArray(colorLoc);
+        render.gl.bindBuffer(render.gl.ARRAY_BUFFER, render.colorBuffer);
+        this.setColor(render.gl);
+        render.gl.vertexAttribPointer(
+            colorLoc,
+            4,
+            render.gl.FLOAT,
+            false,
+            0,
+            0
+        );
 
         const centroid = this.centroid();
 

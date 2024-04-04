@@ -10,7 +10,7 @@
             attribute vec2 a_position;
 
             // untuk warna
-            // attribute vec4 a_color;
+            attribute vec4 a_color;
 
             // matriks untuk transformasi
             uniform mat3 u_matrix;
@@ -23,8 +23,8 @@
                 // gl_Position merupakan variabel spesial yang harus diatur oleh vertex shader
                 // (anggap saja sebagai return result koordinat clip space)
                 gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
-                // v_color = a_color;
-                v_color =  vec4(1, 0, 0.5, 1);
+                v_color = a_color;
+                // v_color =  vec4(1, 0, 0.5, 1);
             }
         </script>
         <script id="fragment-shader-2d" type="x-shader/x-fragment">
@@ -34,12 +34,12 @@
             precision mediump float;
 
             // vector 4 component [r,g,b,a] (alpha -> opacity)
-            // varying vec4 v_color;
+            varying vec4 v_color;
 
             void main() {
                 // gl_FragColor merupakan variabel spesial yang harus diatur
                 // oleh fragment shader (anggap saja sebagai return warna)
-                gl_FragColor = vec4(1, 0, 0.5, 1);
+                gl_FragColor = v_color;
             }
         </script>
         <script type="text/javascript" src="./dist/index.js" defer></script>

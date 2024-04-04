@@ -52,17 +52,15 @@ class Square extends Shape{
     }
 
     public setColor(gl: WebGLRenderingContext): void {
-        
-        gl.ARRAY_BUFFER,
-            new Float32Array([
-                ...this.p0?.colorArray() as [number, number, number, number],
-                ...this.p1?.colorArray() as [number, number, number, number],
-                ...this.p2?.colorArray() as [number, number, number, number],
-                ...this.p0?.colorArray() as [number, number, number, number],
-                ...this.p2?.colorArray() as [number, number, number, number],
-                ...this.p3?.colorArray() as [number, number, number, number]
-            ]),
-            gl.STATIC_DRAW;
+        const colors = new Float32Array([
+            ...this.p0?.colorArray() as [number, number, number, number],
+            ...this.p1?.colorArray() as [number, number, number, number],
+            ...this.p2?.colorArray() as [number, number, number, number],
+            ...this.p0?.colorArray() as [number, number, number, number],
+            ...this.p2?.colorArray() as [number, number, number, number],
+            ...this.p3?.colorArray() as [number, number, number, number]
+        ]);
+        gl.bufferData(gl.ARRAY_BUFFER, colors, gl.STATIC_DRAW);
     }
 
     public isNullVertex(): boolean {
@@ -88,6 +86,7 @@ class Square extends Shape{
     public setVertex(vertex: Vertex, index: number): void {
         if(index == 0){
             this.p0 = vertex;
+            this.p0.color.a=1;
             
             // set base vector, centroid - p0
             let v2 = VertexOperation.minusP(this.the_centroid, this.p0);
