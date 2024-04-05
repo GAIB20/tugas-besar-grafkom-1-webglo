@@ -1,3 +1,4 @@
+import { Color } from "./Color";
 import { Coordinate } from "./Coordinate";
 
 class Vertex {
