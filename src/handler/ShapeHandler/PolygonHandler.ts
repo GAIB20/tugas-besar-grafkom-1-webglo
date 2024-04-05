@@ -12,6 +12,9 @@ export default class PolygonHandler {
     public renderProps: RenderProps | null = null;
     public isAddPoint: boolean = false;
     public pivotPoint : Vertex | null = null;
+    private px : number = 0;
+    private py : number = 0;
+    private timeout : NodeJS.Timeout | null = null;
     
 
     public constructor(document: Document){
@@ -86,11 +89,16 @@ export default class PolygonHandler {
 
             //change button color
             let target = event.target as HTMLButtonElement;
+            let listOfShape = this.document.getElementById("shapelist") as HTMLSelectElement;
             if(!this.isAddPoint){
-                target.style.backgroundColor = "green";            
+                target.style.backgroundColor = "green";
+                //disable list of shape
+                listOfShape.disabled = true;            
             }
             else{
                 target.style.backgroundColor = "greenyellow";
+                //enable list of shape
+                listOfShape.disabled = false;
             }
             this.isAddPoint = !this.isAddPoint;
         });
@@ -132,7 +140,14 @@ export default class PolygonHandler {
             this.polygon!.setPosition(this.renderProps!.gl);
             this.polygon!.setColor(this.renderProps!.gl);
             this.polygon!.render(this.renderProps!);
-            this.renewPoints();
+            this.px = parseInt(value);
+
+            // Reset timeout
+            if(this.timeout) clearTimeout(this.timeout!);
+            this.timeout = setTimeout(() => {
+                this.renewPoints();
+            }, 1500);
+            
         });
         let sliderPointXValue = this.document.createElement("span");
         sliderPointXValue.innerHTML = "0";
@@ -169,7 +184,11 @@ export default class PolygonHandler {
             this.polygon!.setPosition(this.renderProps!.gl);
             this.polygon!.setColor(this.renderProps!.gl);
             this.polygon!.render(this.renderProps!);
-            this.renewPoints();
+            // Reset timeout
+            if(this.timeout) clearTimeout(this.timeout!);
+            this.timeout = setTimeout(() => {
+                this.renewPoints();
+            }, 1500);
         });
         let sliderPointYValue = this.document.createElement("span");
         sliderPointYValue.innerHTML = "0";
@@ -193,6 +212,7 @@ export default class PolygonHandler {
         pointOpt.addEventListener("change", (event: Event) => {
             let val = event.target as HTMLSelectElement;
             let value = parseInt(val.value);
+            console.log(value)
             this.pivotPoint = _.cloneDeep(this.polygon!.getRealVertices()[value]);
             let sliderX = this.document.getElementById("sliderPointX") as HTMLInputElement;
             let sliderY = this.document.getElementById("sliderPointY") as HTMLInputElement;
