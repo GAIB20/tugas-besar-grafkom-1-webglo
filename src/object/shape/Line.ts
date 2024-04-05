@@ -48,6 +48,10 @@ class Line extends Shape {
         return 2;
     }
 
+    public countRealVertex(): number {
+        return 2;
+    }
+
     public setVertex(vertex: Vertex, index: number): void {
         if (index == 1) this.v1 = vertex;
         else if (index == 2) this.v2 = vertex;

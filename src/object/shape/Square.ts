@@ -9,7 +9,7 @@ import VertexOperation from "../../math/VertexOperation";
 // import { arctan } from "../base/Coordinate";
 // import { quickSort } from "../../utils/algorithm";
 
-class Square extends Shape{
+class Square extends Shape {
     readonly shape: ShapeEnum = ShapeEnum.SQUARE;
     public the_centroid: Point;
     public p0 : Point | null;
@@ -87,7 +87,7 @@ class Square extends Shape{
         if(index == 0){
             this.p0 = vertex;
             
-            // set base vector, centroid - p0
+            // set base vector, centroid - p0 base vector, centroid - p0
             let v2 = VertexOperation.minusP(this.the_centroid, this.p0);
             // rotate base vector 90 degree and -90 degree
             let v1 = VertexOperation.transform(v2, this.tf1.rotationMat());
@@ -104,6 +104,10 @@ class Square extends Shape{
 
     public countVertex(): number {
         return 6;
+    }
+
+    public countRealVertex(): number {
+        return 4;
     }
 
     public centroid(): [number, number] {

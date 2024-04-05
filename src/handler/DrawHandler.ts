@@ -3,6 +3,7 @@ import Vertex from "../object/base/Vertex";
 import Line from "../object/shape/Line";
 import Polygon from "../object/shape/Polygon";
 import Square from "../object/shape/Square";
+import Rectangle from "../object/shape/Rectangle";
 import Shape from "../object/shape/Shape";
 import ToolsHandler from "./ToolsHandler";
 import FileHandler from "../io/FileHandler";
@@ -34,6 +35,7 @@ class DrawHandler {
     public loadBtn: HTMLElement | null = null;
 
     /** TOOLS */
+    public rectangleBtn: HTMLElement | null = null;
     public toolsHandler: ToolsHandler;
 
     public constructor(
@@ -48,7 +50,7 @@ class DrawHandler {
         this.listOfShape = [];
         this.colorBuffer = gl.createBuffer() as WebGLBuffer;
         this.positionBuffer = gl.createBuffer() as WebGLBuffer;
-        this.toolsHandler = new ToolsHandler();
+        this.toolsHandler = new ToolsHandler(document);
 
         this.renderProps = {
             gl,
@@ -56,6 +58,9 @@ class DrawHandler {
             positionBuffer: this.positionBuffer,
             colorBuffer: this.colorBuffer,
         };
+
+        this.toolsHandler.polygonHandler.setRenderProps(this.renderProps);
+        this.toolsHandler.rectangleHandler.setRenderProps(this.renderProps);
 
         this.document.addEventListener("DOMContentLoaded", this.rerender);
         this.initComponent();
@@ -69,7 +74,9 @@ class DrawHandler {
         this.squareBtn = this.document.getElementById("square");
         this.saveBtn = this.document.getElementById("save");
         this.loadBtn = this.document.getElementById("load");
+        this.rectangleBtn = this.document.getElementById("rectangle");
 
+        this.initTools();
         this.initTools();
     }
 
@@ -120,8 +127,8 @@ class DrawHandler {
     private whenDrawFirstTime() {
         this.selectedIdxShape = 0;
         this.toolsHandler.enable();
-        this.toolsHandler.init();
         this.toolsHandler.setShape(this.listOfShape[0]);
+        this.toolsHandler.initHTML();
     }
 
     private btnListener() {
@@ -163,6 +170,10 @@ class DrawHandler {
 
             this.rerender();
         });
+        this.rectangleBtn?.addEventListener("click", () => {
+            this.onDraw = false;
+            this.selectShape = ShapeEnum.RECTANGLE;
+        });
     }
 
     private canvasListener() {
@@ -171,73 +182,95 @@ class DrawHandler {
                 [event.clientX, event.clientY, 0],
                 [0, 0, 0, 1]
             );
-            switch (this.selectShape) {
-                case ShapeEnum.LINE:
-                    if (!this.onDraw) {
-                        const line = new Line(this.listOfShape.length, point);
-                        this.listOfShape.push(line);
+            if (!this.toolsHandler.polygonHandler.isAddPoint) {
+                switch (this.selectShape) {
+                    case ShapeEnum.LINE:
+                        if (!this.onDraw) {
+                            const line = new Line(
+                                this.listOfShape.length,
+                                point
+                            );
+                            this.listOfShape.push(line);
 
-                        this.onDraw = true;
-                    } else {
-                        const preLine = this.listOfShape[
-                            this.listOfShape.length - 1
-                        ] as Line;
-                        preLine.setVertex(point, 2);
-                        preLine.render(this.renderProps);
+                            this.onDraw = true;
+                        } else {
+                            const preLine = this.listOfShape[
+                                this.listOfShape.length - 1
+                            ] as Line;
+                            preLine.setVertex(point, 2);
+                            preLine.render(this.renderProps);
 
-                        this.onDraw = false;
-                        this.updateShapeList();
-                    }
-                    break;
-                case ShapeEnum.POLYGON:
-                    if (!this.onDraw) {
-                        const poly = new Polygon(this.listOfShape.length);
-
-                        poly.addVertex(point);
-                        this.listOfShape.push(poly);
-                        ++this.polyCounter;
-                        this.onDraw = true;
-                    } else {
-                        const prePoly = this.listOfShape[
-                            this.listOfShape.length - 1
-                        ] as Polygon;
-                        prePoly.addVertex(point);
-                        ++this.polyCounter;
-                        if (this.polyCounter > 2) {
-                            console.log(prePoly.points);
-                            prePoly.setPosition(this.renderProps.gl);
-                            prePoly.setColor(this.renderProps.gl);
-                            prePoly.render(this.renderProps);
-                            this.polyDrawTimeout = setTimeout(() => {
-                                this.onDraw = false;
-                                this.polyCounter = 0;
-                                this.updateShapeList();
-                            }, 500);
+                            this.onDraw = false;
+                            this.updateShapeList();
                         }
-                    }
-                    break;
-                case ShapeEnum.SQUARE:
-                    if (!this.onDraw) {
-                        const square = new Square(
-                            this.listOfShape.length,
-                            point
-                        );
-                        this.listOfShape.push(square);
-                        this.onDraw = true;
-                    } else {
-                        const preSquare = this.listOfShape[
-                            this.listOfShape.length - 1
-                        ] as Square;
-                        preSquare.setVertex(point, 0);
-                        preSquare.setPosition(this.renderProps.gl);
-                        preSquare.render(this.renderProps);
-                        this.onDraw = false;
-                        this.updateShapeList();
-                    }
-                    break;
+                        break;
+                    case ShapeEnum.POLYGON:
+                        if (!this.onDraw) {
+                            const poly = new Polygon(this.listOfShape.length);
 
-                default:
-                    break;
+                            poly.addVertex(point);
+                            this.listOfShape.push(poly);
+                            ++this.polyCounter;
+                            this.onDraw = true;
+                        } else {
+                            const prePoly = this.listOfShape[
+                                this.listOfShape.length - 1
+                            ] as Polygon;
+                            prePoly.addVertex(point);
+                            ++this.polyCounter;
+                            if (this.polyCounter > 2) {
+                                prePoly.setPosition(this.renderProps.gl);
+                                prePoly.setColor(this.renderProps.gl);
+                                prePoly.render(this.renderProps);
+                                this.polyDrawTimeout = setTimeout(() => {
+                                    this.onDraw = false;
+                                    this.polyCounter = 0;
+                                    this.updateShapeList();
+                                }, 500);
+                            }
+                        }
+                        break;
+                    case ShapeEnum.SQUARE:
+                        if (!this.onDraw) {
+                            const square = new Square(
+                                this.listOfShape.length,
+                                point
+                            );
+                            this.listOfShape.push(square);
+                            this.onDraw = true;
+                        } else {
+                            const preSquare = this.listOfShape[
+                                this.listOfShape.length - 1
+                            ] as Square;
+                            preSquare.setVertex(point, 0);
+                            preSquare.setPosition(this.renderProps.gl);
+                            preSquare.render(this.renderProps);
+                            this.onDraw = false;
+                            this.updateShapeList();
+                        }
+                        break;
+                    case ShapeEnum.RECTANGLE:
+                        if (!this.onDraw) {
+                            const rectangle = new Rectangle(
+                                this.listOfShape.length,
+                                point
+                            );
+                            this.listOfShape.push(rectangle);
+                            this.onDraw = true;
+                        } else {
+                            const preRectangle = this.listOfShape[
+                                this.listOfShape.length - 1
+                            ] as Rectangle;
+                            preRectangle.setVertex(point, 0);
+                            preRectangle.setPosition(this.renderProps.gl);
+                            preRectangle.render(this.renderProps);
+                            this.onDraw = false;
+                            this.updateShapeList();
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
         });
 
@@ -251,6 +284,8 @@ class DrawHandler {
                     }
                     break;
                 case ShapeEnum.SQUARE:
+                    break;
+                case ShapeEnum.RECTANGLE:
                     break;
                 default:
                     break;
@@ -281,6 +316,14 @@ class DrawHandler {
                     preSquare.setVertex(point, 0);
                     preSquare.setPosition(this.renderProps.gl);
                     preSquare.render(this.renderProps);
+                    break;
+                case ShapeEnum.RECTANGLE:
+                    const preRectangle = this.listOfShape[
+                        this.listOfShape.length - 1
+                    ] as Rectangle;
+                    preRectangle.setVertex(point, 0);
+                    preRectangle.setPosition(this.renderProps.gl);
+                    preRectangle.render(this.renderProps);
                     break;
                 default:
                     break;

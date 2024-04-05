@@ -67,26 +67,81 @@ body {
     border-radius: 2px;
 }
 
+.add-point-button {
+    width: 50%;
+    margin: auto;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    padding: 0.5rem 0rem;
+    font-size: 10px;
+    background: greenyellow;
+    border-radius: 2px;
+}
+
+.remove-point-button {
+    width: 50%;
+    margin: auto;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    padding: 0.5rem 0rem;
+    font-size: 10px;
+    background: mediumvioletred;
+    border-radius: 2px;
+}
+
+.polygon-tools {
+    padding-left: 1rem;
+    display: flex;
+    flex-direction: row;
+}
+
 .first-tools {
     padding-left: 1rem;
 }
 
-.second-tools {
+.div-tools {
     padding-left: 1.5rem;
-    padding-top: 1rem;
     display: flex;
     flex-direction: column;
 }
 
-.third-tools {
+.special-tools {
     padding-left: 1.5rem;
-    padding-top: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.translate-tools {
+    padding-left: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.rotation-tool {
+    padding-left: 1.5rem;
     display: flex;
     flex-direction: column;
 }
 
 .shape-list {
     width: 15vw;
+    border-radius: 2px;
+}
+
+.points-container {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    right: 5%;
+    padding-top: 2.5rem;
+}
+
+.points-input {
+    width: 5vw;
     border-radius: 2px;
 }
 

@@ -18,6 +18,7 @@ abstract class Shape {
     public abstract setColor(gl: WebGLRenderingContext): void;
     public abstract isNullVertex(): boolean;
     public abstract countVertex(): number;
+    public abstract countRealVertex(): number;
     public abstract centroid(): [number, number];
     public abstract getGLType(gl: WebGLRenderingContext): number;
     public abstract setVertex(vertex: Vertex, index: number): void;
@@ -44,11 +45,13 @@ abstract class Shape {
 
         const mat = this.transform
             .projectionMat(gl.canvas.width, gl.canvas.height)
+            .multiply(this.transform.customTransformMat())
             .multiply(this.transform.translationMat())
             .multiply(this.transform.inputTransMat(centroid[0], centroid[1]))
             .multiply(this.transform.rotationMat())
             .multiply(this.transform.scaleMat())
             .multiply(this.transform.inputTransMat(-centroid[0], -centroid[1]));
+            
 
         const matrixLoc = gl.getUniformLocation(program, "u_matrix");
 
