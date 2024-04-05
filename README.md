@@ -111,4 +111,5 @@ Tugas Besar ini merupakan Implementasi Program API WebGL sederhana untuk menggam
 3. `npm install -g live-server`
 4. `npm run dev`
 5. `live-server`
+6. Atau anda dapat membuka index.html pada folder ini di browser anda
 ```
