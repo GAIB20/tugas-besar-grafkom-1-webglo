@@ -12,7 +12,6 @@ export default class LineHandler{
     private line: Line | null = null;
     public renderProps: RenderProps | null = null;
 
-
     public constructor(document: Document){
         this.document = document;
 
@@ -44,7 +43,22 @@ export default class LineHandler{
             if(valueSpan){
                 valueSpan.innerHTML = value;
             }
-
+            let selectedPoint = parseInt((this.document.getElementById("points") as HTMLSelectElement).value);
+            let newVertex;
+            if (selectedPoint === 1) {
+                newVertex = _.cloneDeep(this.line!.v1);
+            } else if (selectedPoint === 2) {
+                newVertex = _.cloneDeep(this.line!.v2!);
+            }
+            newVertex!.coor.x += parseInt(value);
+            if (selectedPoint === 1) {
+                this.line?.setVertex(newVertex!, 1);
+            } else if (selectedPoint === 2) {
+                this.line?.setVertex(newVertex!, 2);
+            }
+            this.line?.setPosition(this.renderProps!.gl);
+            this.line?.setColor(this.renderProps!.gl);
+            this.line?.render(this.renderProps!);
         });
         let sliderPointXValue = this.document.createElement("span");
         sliderPointXValue.innerHTML = "0";
@@ -72,7 +86,22 @@ export default class LineHandler{
             if(valueSpan){
                 valueSpan.innerHTML = value;
             }
-
+            let selectedPoint = parseInt((this.document.getElementById("points") as HTMLSelectElement).value);
+            let newVertex;
+            if (selectedPoint === 1) {
+                newVertex = _.cloneDeep(this.line!.v1);
+            } else if (selectedPoint === 2) {
+                newVertex = _.cloneDeep(this.line!.v2!);
+            }
+            newVertex!.coor.y += parseInt(value);
+            if (selectedPoint === 1) {
+                this.line?.setVertex(newVertex!, 1);
+            } else if (selectedPoint === 2) {
+                this.line?.setVertex(newVertex!, 2);
+            }
+            this.line?.setPosition(this.renderProps!.gl);
+            this.line?.setColor(this.renderProps!.gl);
+            this.line?.render(this.renderProps!);
         });
         let sliderPointYValue = this.document.createElement("span");
         sliderPointYValue.innerHTML = "0";
