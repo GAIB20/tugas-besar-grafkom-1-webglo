@@ -297,7 +297,7 @@ export default class ToolsHandler{
 
     public translateY(value: number): void{
         if(this.validChange()){
-            this.selectedShape!.transform.translateY(value);
+            this.selectedShape!.transform.translateY(-value);
         }
     }
 
