@@ -1,9 +1,9 @@
 import Matrix from "./Matrix";
 
 class Transform {
-    private translate: [number, number]; // [0] -> x, [1] -> y
-    private rotate: number; // degree
-    private scale: [number, number]; // [0] -> x, [1] -> y
+    public translate: [number, number]; // [0] -> x, [1] -> y
+    public rotate: number; // degree
+    public scale: [number, number]; // [0] -> x, [1] -> y
 
     public constructor() {
         this.translate = [0, 0];

@@ -1,10 +1,12 @@
-import ShapeEnum, {shapeToString} from "../enum/ShapeEnum";
+import ShapeEnum, { shapeToString } from "../enum/ShapeEnum";
 import Vertex from "../object/base/Vertex";
 import Line from "../object/shape/Line";
 import Polygon from "../object/shape/Polygon";
 import Square from "../object/shape/Square";
 import Shape from "../object/shape/Shape";
 import ToolsHandler from "./ToolsHandler";
+import FileHandler from "../io/FileHandler";
+import { ShapeFactory } from "../io/ShapeFactory";
 
 class DrawHandler {
     /** WEBGL */
@@ -19,15 +21,19 @@ class DrawHandler {
     public positionBuffer: WebGLBuffer;
     public selectShape: ShapeEnum | null = null;
     public listOfShape: Shape[];
-    public selectedIdxShape : number = -1;
+    public selectedIdxShape: number = -1;
     // for polygon
-    public polyCounter = 0; 
+    public polyCounter = 0;
     public polyDrawTimeout: NodeJS.Timeout | null = null;
 
     /** COMPONENT */
     public lineBtn: HTMLElement | null = null;
     public squareBtn: HTMLElement | null = null;
     public polygonBtn: HTMLElement | null = null;
+    public saveBtn: HTMLElement | null = null;
+    public loadBtn: HTMLElement | null = null;
+
+    /** TOOLS */
     public toolsHandler: ToolsHandler;
 
     public constructor(
@@ -61,10 +67,13 @@ class DrawHandler {
         this.lineBtn = this.document.getElementById("line");
         this.polygonBtn = this.document.getElementById("polygon");
         this.squareBtn = this.document.getElementById("square");
-        this.initTools()
+        this.saveBtn = this.document.getElementById("save");
+        this.loadBtn = this.document.getElementById("load");
+
+        this.initTools();
     }
 
-    private initTools(){
+    private initTools() {
         let tools = this.document.getElementById("tools");
         let firstToolContainer = this.document.createElement("div");
         firstToolContainer.id = "first-tool";
@@ -73,7 +82,7 @@ class DrawHandler {
         shapeListLabel.innerHTML = "List of Shapes:";
         let shapeList = this.document.createElement("select");
         shapeList.id = "shapelist";
-        shapeList.className = "shape-list"
+        shapeList.className = "shape-list";
 
         // add event listener to shape list, console log the first option
         shapeList.addEventListener("change", (event: Event) => {
@@ -81,38 +90,55 @@ class DrawHandler {
             this.selectedIdxShape = parseInt(target.value);
             this.toolsHandler.setShape(this.listOfShape[this.selectedIdxShape]);
         });
-        
+
         firstToolContainer.appendChild(shapeListLabel);
         firstToolContainer.appendChild(shapeList);
         tools?.appendChild(firstToolContainer);
     }
 
-    private updateShapeList(){
+    private updateShapeList() {
         let shapeList = this.document.getElementById("shapelist");
-        if(shapeList){
-            if(shapeList.innerHTML===""){
-                this.whenDrawFirstTime()
+        if (shapeList) {
+            if (shapeList.innerHTML === "") {
+                this.whenDrawFirstTime();
             }
             shapeList.innerHTML = "";
-            for(let i = 0; i < this.listOfShape.length; i++){
+            for (let i = 0; i < this.listOfShape.length; i++) {
                 let shape = this.listOfShape[i];
                 let option = this.document.createElement("option");
                 option.value = i.toString();
-                option.text = shapeToString(shape.shape) + "_" + (i < 10 ? "0" : "") + i.toString();
+                option.text =
+                    shapeToString(shape.shape) +
+                    "_" +
+                    (i < 10 ? "0" : "") +
+                    i.toString();
                 shapeList.appendChild(option);
             }
         }
     }
 
-    private whenDrawFirstTime(){
+    private whenDrawFirstTime() {
         this.selectedIdxShape = 0;
         this.toolsHandler.enable();
         this.toolsHandler.init();
         this.toolsHandler.setShape(this.listOfShape[0]);
-
     }
 
     private btnListener() {
+        this.saveBtn?.addEventListener("click", () => {
+            console.log("click");
+            const data = FileHandler.convertToJSON(this.listOfShape);
+
+            const blob: Blob = new Blob([data], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+
+            const a = this.document.createElement("a");
+            a.href = url;
+            a.download = "data.json";
+            this.document.body.appendChild(a);
+
+            URL.revokeObjectURL(url);
+        });
         this.lineBtn?.addEventListener("click", () => {
             this.onDraw = false;
             this.selectShape = ShapeEnum.LINE;
@@ -124,6 +150,18 @@ class DrawHandler {
         this.squareBtn?.addEventListener("click", () => {
             this.onDraw = false;
             this.selectShape = ShapeEnum.SQUARE;
+        });
+        this.loadBtn?.addEventListener("change", async (event: Event) => {
+            const raw = await FileHandler.read(event);
+            const data: Shape[] = FileHandler.convertToShape(raw);
+            for (let obj of data) {
+                this.listOfShape.push(obj);
+            }
+
+            console.log("Data");
+            console.log(this.listOfShape);
+
+            this.rerender();
         });
     }
 
@@ -148,13 +186,13 @@ class DrawHandler {
                         preLine.render(this.renderProps);
 
                         this.onDraw = false;
-                        this.updateShapeList()
+                        this.updateShapeList();
                     }
                     break;
                 case ShapeEnum.POLYGON:
                     if (!this.onDraw) {
                         const poly = new Polygon(this.listOfShape.length);
-                        
+
                         poly.addVertex(point);
                         this.listOfShape.push(poly);
                         ++this.polyCounter;
@@ -165,26 +203,28 @@ class DrawHandler {
                         ] as Polygon;
                         prePoly.addVertex(point);
                         ++this.polyCounter;
-                        if(this.polyCounter > 2){
-                            console.log(prePoly.points)
+                        if (this.polyCounter > 2) {
+                            console.log(prePoly.points);
                             prePoly.setPosition(this.renderProps.gl);
                             prePoly.setColor(this.renderProps.gl);
                             prePoly.render(this.renderProps);
                             this.polyDrawTimeout = setTimeout(() => {
                                 this.onDraw = false;
                                 this.polyCounter = 0;
-                                this.updateShapeList()
+                                this.updateShapeList();
                             }, 500);
-                        } 
+                        }
                     }
                     break;
                 case ShapeEnum.SQUARE:
-                    if(!this.onDraw){
-                        const square = new Square(this.listOfShape.length, point);
+                    if (!this.onDraw) {
+                        const square = new Square(
+                            this.listOfShape.length,
+                            point
+                        );
                         this.listOfShape.push(square);
                         this.onDraw = true;
-                    }
-                    else{
+                    } else {
                         const preSquare = this.listOfShape[
                             this.listOfShape.length - 1
                         ] as Square;
@@ -192,7 +232,7 @@ class DrawHandler {
                         preSquare.setPosition(this.renderProps.gl);
                         preSquare.render(this.renderProps);
                         this.onDraw = false;
-                        this.updateShapeList()
+                        this.updateShapeList();
                     }
                     break;
 
@@ -206,7 +246,7 @@ class DrawHandler {
                 case ShapeEnum.LINE:
                     break;
                 case ShapeEnum.POLYGON:
-                    if(this.onDraw && this.polyCounter > 2){
+                    if (this.onDraw && this.polyCounter > 2) {
                         clearTimeout(this.polyDrawTimeout as NodeJS.Timeout);
                     }
                     break;
@@ -216,7 +256,6 @@ class DrawHandler {
                     break;
             }
         });
-
 
         this.canvas.addEventListener("mousemove", (event: MouseEvent) => {
             if (!this.onDraw) return;
@@ -232,7 +271,7 @@ class DrawHandler {
                     preLine.setVertex(point, 2);
                     preLine.render(this.renderProps);
                     break;
-                
+
                 case ShapeEnum.POLYGON:
                     break;
                 case ShapeEnum.SQUARE:
@@ -253,7 +292,6 @@ class DrawHandler {
         for (let i = 0; i < this.listOfShape.length; i++) {
             this.listOfShape[i].render(this.renderProps);
         }
-  
 
         window.requestAnimationFrame(this.rerender);
     };

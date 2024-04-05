@@ -51,8 +51,16 @@
             <h1 id="title">Web GLo</h1>
         </div>
         <div class="shape-control control">
-            <button class="btn btn2">Save</button>
-            <button class="btn btn2">Load</button>
+            <div class="btn-wrap">
+                <input
+                    type="file"
+                    accept=".json"
+                    id="load"
+                    style="display: none"
+                />
+                <label for="load" class="btn2">Load</label>
+            </div>
+            <button class="btn btn2" id="save">Save</button>
         </div>
         <div class="bottom-control control">
             <div class="right-bottom">
@@ -65,8 +73,7 @@
                     <button class="btn" id="polygon">Polygon</button>
                 </div>
             </div>
-            <div class="bottom-tools title-color" id="tools">
-            </div>
+            <div class="bottom-tools title-color" id="tools"></div>
         </div>
     </body>
 </html>
