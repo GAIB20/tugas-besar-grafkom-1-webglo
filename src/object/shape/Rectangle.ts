@@ -105,11 +105,10 @@ class Rectangle extends Shape {
     public getSameXPoint(num : number) : Point{
         let arr = [this.p0!, this.p1!, this.p2!, this.p3!];
         for(let i = 0; i < arr.length; i++){
-            if(i % 2 !== num % 2){
                 if(this.getPoint(num).coor.x === arr[i].coor.x && this.getPoint(num).coor.y !== arr[i].coor.y){
                     return arr[i];
                 }
-            }
+            
         }
         return this.p0!;
     }
@@ -117,11 +116,10 @@ class Rectangle extends Shape {
     public getSameYPoint(num : number) : Point{
         let arr = [this.p0!, this.p1!, this.p2!, this.p3!];
         for(let i = 0; i < arr.length; i++){
-            if(i % 2 === num % 2){
                 if(this.getPoint(num).coor.y === arr[i].coor.y && this.getPoint(num).coor.x !== arr[i].coor.x){
                     return arr[i];
                 }
-            }
+            
         }
         return this.p0!;
     }

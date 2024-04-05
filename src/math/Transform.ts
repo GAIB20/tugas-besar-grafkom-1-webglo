@@ -98,6 +98,9 @@ class Transform {
         }
         else return this.customMat
     }
+
+    /** Other Method */
+
 }
 
 export default Transform;
