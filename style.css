@@ -45,7 +45,7 @@ body {
     background: var(--black);
 }
 
-.bottom-tools{
+.bottom-tools {
     display: flex;
     flex-direction: row;
 }
@@ -67,7 +67,7 @@ body {
     border-radius: 2px;
 }
 
-.add-point-button{
+.add-point-button {
     width: 50%;
     margin: auto;
     margin-top: 0.5rem;
@@ -80,7 +80,7 @@ body {
     border-radius: 2px;
 }
 
-.remove-point-button{
+.remove-point-button {
     width: 50%;
     margin: auto;
     margin-top: 0.5rem;
@@ -93,46 +93,46 @@ body {
     border-radius: 2px;
 }
 
-.polygon-tools{
+.polygon-tools {
     padding-left: 1rem;
     display: flex;
     flex-direction: row;
 }
 
-.first-tools{
+.first-tools {
     padding-left: 1rem;
 }
 
-.div-tools{
+.div-tools {
     padding-left: 1.5rem;
     display: flex;
     flex-direction: column;
 }
 
-.special-tools{
+.special-tools {
     padding-left: 1.5rem;
     display: flex;
     flex-direction: column;
 }
 
-.translate-tools{
+.translate-tools {
     padding-left: 1.5rem;
     display: flex;
     flex-direction: column;
 }
 
-.rotation-tool{
+.rotation-tool {
     padding-left: 1.5rem;
     display: flex;
     flex-direction: column;
 }
 
-.shape-list{
+.shape-list {
     width: 15vw;
     border-radius: 2px;
 }
 
-.points-container{
+.points-container {
     display: flex;
     flex-direction: column;
     position: absolute;
@@ -140,12 +140,12 @@ body {
     padding-top: 2.5rem;
 }
 
-.points-input{
+.points-input {
     width: 5vw;
     border-radius: 2px;
 }
 
-.color-picker{
+.color-picker {
     width: 15vw;
     border-radius: 2px;
 }
@@ -170,4 +170,14 @@ body {
     margin-top: 5px;
     margin-bottom: 5px;
     width: 90%;
+    padding: 0.5rem 0rem;
+    font-size: 15px;
+    background: white;
+    border-radius: 2px;
+    text-align: center;
+}
+
+.btn-wrap {
+    display: flex;
+    width: 100%;
 }

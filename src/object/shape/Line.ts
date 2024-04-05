@@ -1,42 +1,43 @@
 import ShapeEnum from "../../enum/ShapeEnum";
 import Vertex from "../base/Vertex";
-import Point from "../base/Vertex";
 import Shape from "./Shape";
 
 class Line extends Shape {
     readonly shape: ShapeEnum = ShapeEnum.LINE;
-    public p1: Point;
-    public p2: Point | null;
+    public v1: Vertex;
+    public v2: Vertex | null;
 
-    public constructor(id: number, p1: Point, p2: Point | null = null) {
+    public constructor(id: number, v1: Vertex, v2: Vertex | null = null) {
         super(id);
 
-        this.p1 = p1;
-        this.p2 = p2;
+        this.v1 = v1;
+        this.v2 = v2;
     }
 
     public setPosition(gl: WebGLRenderingContext): void {
         gl.bufferData(
             gl.ARRAY_BUFFER,
             new Float32Array([
-                ...this.p1.coorArray(),
-                ...(this.p2?.coorArray() as [number, number]),
+                ...this.v1.coorArray(),
+                ...(this.v2?.coorArray() as [number, number]),
             ]),
             gl.STATIC_DRAW
         );
     }
 
     public setColor(gl: WebGLRenderingContext): void {
-       gl.bufferData( gl.ARRAY_BUFFER,
-        new Float32Array([
-            ...this.p1.colorArray(),
-            ...(this.p2?.colorArray() as [number, number, number, number]),
+        gl.bufferData(
+            gl.ARRAY_BUFFER,
+            new Float32Array([
+                ...this.v1.colorArray(),
+                ...(this.v2?.colorArray() as [number, number, number, number]),
             ]),
-        gl.STATIC_DRAW);
+            gl.STATIC_DRAW
+        );
     }
 
     public isNullVertex(): boolean {
-        return this.p1 != null && this.p2 != null;
+        return this.v1 != null && this.v2 != null;
     }
 
     public getGLType(gl: WebGLRenderingContext): number {
@@ -52,20 +53,20 @@ class Line extends Shape {
     }
 
     public setVertex(vertex: Vertex, index: number): void {
-        if (index == 1) this.p1 = vertex;
-        else if (index == 2) this.p2 = vertex;
+        if (index == 1) this.v1 = vertex;
+        else if (index == 2) this.v2 = vertex;
     }
 
     public changeColor(color: [number, number, number, number]): void {
         const [r, g, b, a] = color;
-        this.p1.color = { r, g, b, a };
-        this.p2!.color = { r, g, b, a };
+        this.v1.color = { r, g, b, a };
+        this.v2!.color = { r, g, b, a };
     }
 
     public centroid(): [number, number] {
         return [
-            (this.p1.coor.x + (this.p2?.coor.x as number)) / 2,
-            (this.p1.coor.y + (this.p2?.coor.y as number)) / 2,
+            (this.v1.coor.x + (this.v2?.coor.x as number)) / 2,
+            (this.v1.coor.y + (this.v2?.coor.y as number)) / 2,
         ];
     }
 }

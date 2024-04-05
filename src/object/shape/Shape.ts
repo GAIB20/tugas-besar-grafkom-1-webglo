@@ -5,7 +5,7 @@ import Vertex from "../base/Vertex";
 
 abstract class Shape {
     readonly id: number;
-    readonly transform: Transform;
+    public transform: Transform;
 
     abstract readonly shape: ShapeEnum;
 
