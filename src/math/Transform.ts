@@ -4,6 +4,7 @@ class Transform {
     private translate: [number, number]; // [0] -> x, [1] -> y
     private rotate: number; // degree
     private scale: [number, number]; // [0] -> x, [1] -> y
+    private customMat : Matrix | null = null;
 
     public constructor() {
         this.translate = [0, 0];
@@ -38,6 +39,10 @@ class Transform {
         this.rotate = (deg * Math.PI) / 180;
     }
 
+    public setCustomMatrix(mat : Matrix) : void{
+        this.customMat = mat
+    }
+
     /* MATRIX */
     public translationMat(): Matrix {
         return new Matrix(
@@ -60,6 +65,14 @@ class Transform {
             { x: 0, y: 0, p: 1 }
         );
     }
+    public inputScaleMat(scale_x : number, scale_y : number): Matrix {
+        return new Matrix(
+            { x: scale_x, y: 0, p: 0 },
+            { x: 0, y: scale_y, p: 0 },
+            { x: 0, y: 0, p: 1 }
+        );
+    }   
+
     public rotationMat(): Matrix {
         return new Matrix(
             { x: Math.cos(this.rotate), y: Math.sin(this.rotate), p: 0 },
@@ -73,6 +86,17 @@ class Transform {
             { x: 0, y: -2 / height, p: 0 },
             { x: -1, y: 1, p: 1 }
         );
+    }
+
+    public customTransformMat() : Matrix{
+        if(this.customMat == null){
+            return new Matrix(
+                { x: 1, y: 0, p: 0 },
+                { x: 0, y: 1, p: 0 },
+                { x: 0, y: 0, p: 1 }
+            );
+        }
+        else return this.customMat
     }
 }
 

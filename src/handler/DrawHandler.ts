@@ -55,6 +55,7 @@ class DrawHandler {
         };
 
         this.toolsHandler.polygonHandler.setRenderProps(this.renderProps);
+        this.toolsHandler.rectangleHandler.setRenderProps(this.renderProps)
 
         this.document.addEventListener("DOMContentLoaded", this.rerender);
         this.initComponent();

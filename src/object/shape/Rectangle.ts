@@ -87,6 +87,45 @@ class Rectangle extends Shape {
         return 4;
     }
 
+    public getPoint(num : number) : Point{
+        switch(num){
+            case 0:
+                return this.p0!;
+            case 1:
+                return this.p1!;
+            case 2:
+                return this.p2!;
+            case 3:
+                return this.p3!;
+            default:
+                return this.p0!;
+        }
+    }
+
+    public getSameXPoint(num : number) : Point{
+        let arr = [this.p0!, this.p1!, this.p2!, this.p3!];
+        for(let i = 0; i < arr.length; i++){
+            if(i % 2 !== num % 2){
+                if(this.getPoint(num).coor.x === arr[i].coor.x && this.getPoint(num).coor.y !== arr[i].coor.y){
+                    return arr[i];
+                }
+            }
+        }
+        return this.p0!;
+    }
+
+    public getSameYPoint(num : number) : Point{
+        let arr = [this.p0!, this.p1!, this.p2!, this.p3!];
+        for(let i = 0; i < arr.length; i++){
+            if(i % 2 === num % 2){
+                if(this.getPoint(num).coor.y === arr[i].coor.y && this.getPoint(num).coor.x !== arr[i].coor.x){
+                    return arr[i];
+                }
+            }
+        }
+        return this.p0!;
+    }
+
     public centroid(): [number, number] {
         if (this.p0 && this.p2) {
             const centroidX = (this.p0.coor.x + this.p2.coor.x) / 2;

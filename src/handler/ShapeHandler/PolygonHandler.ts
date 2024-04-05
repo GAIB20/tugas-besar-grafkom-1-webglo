@@ -187,7 +187,7 @@ export default class PolygonHandler {
     }
 
 
-    public handlePointOptionChange() : void{
+    public eventListener() : void{
         this.pivotPoint = _.cloneDeep(this.polygon!.getRealVertices()[0]);
         let pointOpt = this.document.getElementById("points") as HTMLSelectElement;
         pointOpt.addEventListener("change", (event: Event) => {

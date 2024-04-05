@@ -45,12 +45,20 @@ class Matrix {
         const m12 = dot(mat.yAxis, point_t);
         const m20 = dot(mat.point, xAxis_t);
         const m21 = dot(mat.point, yAxis_t);
-        const m22 = dot(mat.yAxis, point_t);
+        const m22 = dot(mat.point, point_t);
 
         return new Matrix(
             { x: m00, y: m01, p: m02 },
             { x: m10, y: m11, p: m12 },
             { x: m20, y: m21, p: m22 }
+        );
+    }
+
+    public static identity(): Matrix {
+        return new Matrix(
+            { x: 1, y: 0, p: 0 },
+            { x: 0, y: 1, p: 0 },
+            { x: 0, y: 0, p: 1 }
         );
     }
 }

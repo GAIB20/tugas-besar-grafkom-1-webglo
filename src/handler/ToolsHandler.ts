@@ -5,7 +5,9 @@ import Shape from "../object/shape/Shape";
 import ShapeEnum from "../enum/ShapeEnum";
 import { hexToRgb } from "../utils/algorithm";
 import PolygonHandler from "./ShapeHandler/PolygonHandler";
+import RectangleHandler from "./ShapeHandler/RectangleHandler";
 import Polygon from "../object/shape/Polygon";
+import Rectangle from "../object/shape/Rectangle";
 
 
 export default class ToolsHandler{
@@ -13,11 +15,13 @@ export default class ToolsHandler{
     private selectedShape : Shape | null = null;
     private document: Document;
     public polygonHandler: PolygonHandler;
+    public rectangleHandler : RectangleHandler;
 
     public constructor(document: Document){
         this.enabled = false;
         this.document = document;
         this.polygonHandler = new PolygonHandler(this.document);
+        this.rectangleHandler = new RectangleHandler(this.document);
 
     }
 
@@ -54,7 +58,15 @@ export default class ToolsHandler{
     }
 
     public eventListener(): void{
-        this.polygonHandler.handlePointOptionChange();
+        switch(this.selectedShape?.shape){
+            case ShapeEnum.POLYGON:
+                this.polygonHandler.eventListener();
+                break;
+            case ShapeEnum.RECTANGLE:
+                this.rectangleHandler.eventListener();
+            default:
+                break;
+        }
     }
 
     private generalMethodHTML(): void{
@@ -194,7 +206,7 @@ export default class ToolsHandler{
         specialContainer.className = "special-tools";
         switch(this.selectedShape?.shape){
             case ShapeEnum.POLYGON:
-                this.polygonHandler.setPolygon(this.selectedShape! as Polygon)
+                this.polygonHandler.setPolygon(this.selectedShape as Polygon)
                 this.polygonHandler.polygonMethodHTML(specialContainer);
                 break;
             case ShapeEnum.SQUARE:
@@ -204,7 +216,8 @@ export default class ToolsHandler{
                 this.lineMethod(specialContainer);
                 break;
             case ShapeEnum.RECTANGLE:
-                this.rectangleMethod(specialContainer);
+                this.rectangleHandler.setRectangle(this.selectedShape as Rectangle)
+                this.rectangleHandler.rectangleMethodHTML(specialContainer);
                 break;
             default:
                 break;
@@ -273,63 +286,7 @@ export default class ToolsHandler{
         container.appendChild(sliderLengthScaleInputValue);
     }
 
-    private rectangleMethod(container : HTMLDivElement): void{
-        let sliderWidthLabel = this.document.createElement("label");
-        sliderWidthLabel.innerHTML = "Width Scale: ";
-        let sliderWidthInput = this.document.createElement("input");
-        sliderWidthInput.type = "range";
-        sliderWidthInput.id = "sliderWidth";
-        sliderWidthInput.className = "slider-input";
-        sliderWidthInput.value = "0";
-        sliderWidthInput.min = "-100";
-        sliderWidthInput.max = "100";
-        sliderWidthInput.addEventListener("input", (event: Event) => {
-            let target = event.target as HTMLInputElement;
-            let value = target.value;
-            let valueSpan = this.document.getElementById("sliderWidthLabel");
-            if(valueSpan){
-                valueSpan.innerHTML = value;
-            }
-        });
-        let sliderWidthValue = this.document.createElement("span");
-        sliderWidthValue.innerHTML = "0";
-        sliderWidthValue.id = "sliderWidthLabel";
-        let sliderWidthInputValue = this.document.createElement("span");
-        sliderWidthInputValue.appendChild(sliderWidthInput);
-        sliderWidthInputValue.appendChild(sliderWidthValue);
-
-        container.appendChild(sliderWidthLabel);
-        container.appendChild(sliderWidthInputValue);
-
-        let sliderPointYLabel = this.document.createElement("label");
-        sliderPointYLabel.innerHTML = "Height Scale: ";
-        let sliderPointYInput = this.document.createElement("input");
-        sliderPointYInput.type = "range";
-        sliderPointYInput.id = "sliderPointY";
-        sliderPointYInput.className = "slider-input";
-        sliderPointYInput.value = "0";
-        sliderPointYInput.min = "-100";
-        sliderPointYInput.max = "100";
-        sliderPointYInput.addEventListener("input", (event: Event) => {
-            let target = event.target as HTMLInputElement;
-            let value = target.value;
-            let valueSpan = this.document.getElementById("SliderPointYLabel");
-            if(valueSpan){
-                valueSpan.innerHTML = value;
-            }
-        });
-        let sliderPointYValue = this.document.createElement("span");
-        sliderPointYValue.innerHTML = "0";
-        sliderPointYValue.id = "SliderPointYLabel";
-        let sliderPointYInputValue = this.document.createElement("span");
-        sliderPointYInputValue.appendChild(sliderPointYInput);
-        sliderPointYInputValue.appendChild(sliderPointYValue);
-
-        container.appendChild(sliderPointYLabel);
-        container.appendChild(sliderPointYInputValue);
-
-    }
-
+    
     /**
      * Change shape when shape selector is changed
      * @param shape 
