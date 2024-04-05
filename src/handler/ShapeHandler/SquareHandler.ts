@@ -33,19 +33,12 @@ export default class SquareHandler{
         sliderScaleInput.type = "range";
         sliderScaleInput.id = "sliderScale";
         sliderScaleInput.className = "slider-input";
-        sliderScaleInput.value = "0";
+        sliderScaleInput.value = "20";
         sliderScaleInput.min = "-100";
         sliderScaleInput.max = "100";
-        sliderScaleInput.addEventListener("input", (event: Event) => {
-            let target = event.target as HTMLInputElement;
-            let value = target.value;
-            let valueSpan = this.document.getElementById("SliderScaleLabel");
-            if(valueSpan){
-                valueSpan.innerHTML = value;
-            }
-        });
+
         let sliderScaleValue = this.document.createElement("span");
-        sliderScaleValue.innerHTML = "0";
+        sliderScaleValue.innerHTML = "1";
         sliderScaleValue.id = "SliderScaleLabel";
         let sliderScaleInputValue = this.document.createElement("span");
         sliderScaleInputValue.appendChild(sliderScaleInput);
@@ -55,4 +48,27 @@ export default class SquareHandler{
         container.appendChild(sliderScaleInputValue);
     }
     
+    public eventListener() : void{
+        let sliderScaleInput = this.document.getElementById("sliderScale") as HTMLInputElement;
+        sliderScaleInput.addEventListener("input", (event: Event) => {
+            let target = event.target as HTMLInputElement;
+            let value = this.scaleValue(parseInt(target.value));
+            let valueSpan = this.document.getElementById("SliderScaleLabel");
+            if(valueSpan){
+                valueSpan.innerHTML = value.toPrecision(2).toString();
+            }
+            this.handleScale(value);
+        });
+    }
+
+    private handleScale(value: number): void{
+        if(this.square){
+            this.square.transform.scaleX(value);
+            this.square.transform.scaleY(value);
+        }
+    }
+
+    private scaleValue(value: number, scale: number = 1/5): number{
+        return value * scale;
+    }
 }

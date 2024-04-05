@@ -74,7 +74,7 @@ export default class ToolsHandler{
                 this.rectangleHandler.eventListener();
                 break;
             case ShapeEnum.SQUARE:
-                // this.squareHandler.eventListener();
+                this.squareHandler.eventListener();
                 break;
             case ShapeEnum.LINE:
                 // this.lineHandler.eventListener();
@@ -255,6 +255,7 @@ export default class ToolsHandler{
             let tools = this.document.getElementById("tools");
             let rotationTool = this.document.getElementById("rotation-tool");
             let translateTools = this.document.getElementById("translate-tools");
+            let pointSelector = this.document.getElementById("points-container");
             let specialTools = this.document.getElementById("special-tools");
             if(rotationTool){
                 tools?.removeChild(rotationTool);
@@ -264,6 +265,9 @@ export default class ToolsHandler{
             }
             if(specialTools){
                 tools?.removeChild(specialTools);
+            }
+            if(pointSelector){
+                tools?.removeChild(pointSelector);
             }
             this.specialMethodHTML();
             this.generalMethodHTML(); 

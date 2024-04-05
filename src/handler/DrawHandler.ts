@@ -77,7 +77,6 @@ class DrawHandler {
         this.rectangleBtn = this.document.getElementById("rectangle");
 
         this.initTools();
-        this.initTools();
     }
 
     private initTools() {

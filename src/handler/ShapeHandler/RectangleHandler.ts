@@ -101,6 +101,8 @@ export default class RectangleHandler{
 
         //listener
         let pointOpt = this.document.getElementById("points") as HTMLSelectElement;
+
+        //reset the event listener
         pointOpt.addEventListener("change", (event: Event) => {
             this.setupNewPoint();
         });
@@ -109,10 +111,8 @@ export default class RectangleHandler{
 
     private setupNewPoint(): void{
         let pointsSelected = parseInt((this.document.getElementById("points") as HTMLSelectElement).value);
-        console.log(pointsSelected)
         this.pivotPointWidth = _.cloneDeep(this.rectangle!.getSameYPoint(pointsSelected));
         this.pivotPointHeight = _.cloneDeep(this.rectangle!.getSameXPoint(pointsSelected));
-        console.log(this.pivotPointWidth)
         this.scaleWidth = Matrix.identity();
         this.scaleHeight = Matrix.identity();
         this.rectangle!.transform.setCustomMatrix(Matrix.identity());
@@ -120,7 +120,6 @@ export default class RectangleHandler{
     }
 
     public handleScaleWidth(value: number): void{
-        console.log(this.pivotPointWidth)
         let m0 = this.rectangle?.transform.inputTransMat(this.pivotPointWidth!.coor.x, this.pivotPointWidth!.coor.y);
         let m1 = this.rectangle?.transform.inputScaleMat(value, 1);
         let m2 = this.rectangle?.transform.inputTransMat(-this.pivotPointWidth!.coor.x, -this.pivotPointWidth!.coor.y);
