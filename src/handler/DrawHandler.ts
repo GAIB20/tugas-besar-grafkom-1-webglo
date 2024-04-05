@@ -155,6 +155,7 @@ class DrawHandler {
 
             console.log("Data");
             console.log(this.listOfShape);
+            this.updateShapeList();
 
             this.rerender();
         });
