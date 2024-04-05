@@ -7,7 +7,6 @@
 import ShapeEnum from "../../enum/ShapeEnum";
 import Shape from "./Shape";
 import Point from "../base/Vertex";
-import Transform from "../../math/Transform";
 import Vertex from "../base/Vertex";
 
 class Rectangle extends Shape {
@@ -42,7 +41,7 @@ class Rectangle extends Shape {
     }
 
     public setVertex(vertex: Vertex, index: number): void {
-        if (index == 0) {
+        if (index === 2) {
             this.p2 = vertex;
 
             this.p1 = new Vertex([this.p2.coor.x, this.p0!.coor.y, 0], [0, 0, 0, 1]);

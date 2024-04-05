@@ -21,7 +21,7 @@ export default class LineHandler{
         this.line = line;
     }
 
-    public setRenderProps(renderProps: RenderProps): void{
+    public setRenderProps(renderProps: RenderProps): void {
         this.renderProps = renderProps;
     }
 
@@ -44,17 +44,22 @@ export default class LineHandler{
                 valueSpan.innerHTML = value;
             }
             let selectedPoint = parseInt((this.document.getElementById("points") as HTMLSelectElement).value);
-            let newVertex;
-            if (selectedPoint === 1) {
-                newVertex = _.cloneDeep(this.line!.v1);
-            } else if (selectedPoint === 2) {
-                newVertex = _.cloneDeep(this.line!.v2!);
-            }
-            newVertex!.coor.x += parseInt(value);
-            if (selectedPoint === 1) {
-                this.line?.setVertex(newVertex!, 1);
-            } else if (selectedPoint === 2) {
-                this.line?.setVertex(newVertex!, 2);
+            // let newVertex;
+            // if (selectedPoint === 1) {
+            //     newVertex = _.cloneDeep(this.line!.v1);
+            // } else if (selectedPoint === 2) {
+            //     newVertex = _.cloneDeep(this.line!.v2!);
+            // }
+            // newVertex!.coor.x += parseInt(value);
+            // if (selectedPoint === 1) {
+            //     this.line?.setVertex(newVertex!, 1);
+            // } else if (selectedPoint === 2) {
+            //     this.line?.setVertex(newVertex!, 2);
+            // }
+            if (selectedPoint === 0) {
+                this.line!.tfv1x = parseInt(value);
+            } else if (selectedPoint === 1) {
+                this.line!.tfv2x = parseInt(value);
             }
             this.line?.setPosition(this.renderProps!.gl);
             this.line?.setColor(this.renderProps!.gl);
@@ -87,17 +92,22 @@ export default class LineHandler{
                 valueSpan.innerHTML = value;
             }
             let selectedPoint = parseInt((this.document.getElementById("points") as HTMLSelectElement).value);
-            let newVertex;
-            if (selectedPoint === 1) {
-                newVertex = _.cloneDeep(this.line!.v1);
-            } else if (selectedPoint === 2) {
-                newVertex = _.cloneDeep(this.line!.v2!);
-            }
-            newVertex!.coor.y += parseInt(value);
-            if (selectedPoint === 1) {
-                this.line?.setVertex(newVertex!, 1);
-            } else if (selectedPoint === 2) {
-                this.line?.setVertex(newVertex!, 2);
+            // let newVertex;
+            // if (selectedPoint === 0) {
+            //     newVertex = _.cloneDeep(this.line!.v1);
+            // } else if (selectedPoint === 1) {
+            //     newVertex = _.cloneDeep(this.line!.v2!);
+            // }
+            // newVertex!.coor.y += parseInt(value);
+            // if (selectedPoint === 0) {
+            //     this.line?.setVertex(newVertex!, 1);
+            // } else if (selectedPoint === 1) {
+            //     this.line?.setVertex(newVertex!, 2);
+            // }
+            if (selectedPoint === 0) {
+                this.line!.tfv1y = parseInt(value);
+            } else if (selectedPoint === 1) {
+                this.line!.tfv2y = parseInt(value);
             }
             this.line?.setPosition(this.renderProps!.gl);
             this.line?.setColor(this.renderProps!.gl);

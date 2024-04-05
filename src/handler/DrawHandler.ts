@@ -260,7 +260,7 @@ class DrawHandler {
                             const preRectangle = this.listOfShape[
                                 this.listOfShape.length - 1
                             ] as Rectangle;
-                            preRectangle.setVertex(point, 0);
+                            preRectangle.setVertex(point, 2);
                             preRectangle.setPosition(this.renderProps.gl);
                             preRectangle.render(this.renderProps);
                             this.onDraw = false;
@@ -320,7 +320,7 @@ class DrawHandler {
                     const preRectangle = this.listOfShape[
                         this.listOfShape.length - 1
                     ] as Rectangle;
-                    preRectangle.setVertex(point, 0);
+                    preRectangle.setVertex(point, 2);
                     preRectangle.setPosition(this.renderProps.gl);
                     preRectangle.render(this.renderProps);
                     break;

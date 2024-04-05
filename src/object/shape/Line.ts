@@ -7,6 +7,11 @@ class Line extends Shape {
     public v1: Vertex;
     public v2: Vertex | null;
 
+    public tfv1x: number = 0;
+    public tfv1y: number = 0;
+    public tfv2x: number = 0;
+    public tfv2y: number = 0;
+
     public constructor(id: number, v1: Vertex, v2: Vertex | null = null) {
         super(id);
 
@@ -15,14 +20,23 @@ class Line extends Shape {
     }
 
     public setPosition(gl: WebGLRenderingContext): void {
+
         gl.bufferData(
             gl.ARRAY_BUFFER,
             new Float32Array([
-                ...this.v1.coorArray(),
-                ...(this.v2?.coorArray() as [number, number]),
+                this.v1.coor.x + this.tfv1x, this.v1.coor.y + this.tfv1y,
+                this.v2?.coor.x as number + this.tfv2x, this.v2?.coor.y as number + this.tfv2y
             ]),
             gl.STATIC_DRAW
         );
+        // gl.bufferData(
+        //     gl.ARRAY_BUFFER,
+        //     new Float32Array([
+        //         ...this.v1.coorArray(),
+        //         ...(this.v2?.coorArray() as [number, number]),
+        //     ]),
+        //     gl.STATIC_DRAW
+        // );
     }
 
     public setColor(gl: WebGLRenderingContext): void {
