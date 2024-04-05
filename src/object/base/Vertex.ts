@@ -1,5 +1,6 @@
 import { Color } from "./Color";
 import { Coordinate } from "./Coordinate";
+import {Color} from "./Color";
 
 class Vertex {
     public coor: Coordinate;

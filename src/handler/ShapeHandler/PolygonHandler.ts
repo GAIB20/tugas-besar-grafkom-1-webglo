@@ -136,6 +136,7 @@ export default class PolygonHandler {
             let pointsSelected = parseInt((this.document.getElementById("points") as HTMLSelectElement).value);
             this.polygon!.removeVertex(pointsSelected);
             newVertex.coor.x += parseInt(value);
+            newVertex.coor.y += this.py;
             this.polygon!.addVertex(newVertex);
             this.polygon!.setPosition(this.renderProps!.gl);
             this.polygon!.setColor(this.renderProps!.gl);
@@ -180,10 +181,12 @@ export default class PolygonHandler {
             let pointsSelected = parseInt((this.document.getElementById("points") as HTMLSelectElement).value);
             this.polygon!.removeVertex(pointsSelected);
             newVertex.coor.y += parseInt(value);
+            newVertex.coor.x += this.px;
             this.polygon!.addVertex(newVertex);
             this.polygon!.setPosition(this.renderProps!.gl);
             this.polygon!.setColor(this.renderProps!.gl);
             this.polygon!.render(this.renderProps!);
+            this.py = parseInt(value);
             // Reset timeout
             if(this.timeout) clearTimeout(this.timeout!);
             this.timeout = setTimeout(() => {
