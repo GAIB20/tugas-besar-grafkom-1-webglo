@@ -7,7 +7,6 @@
 import ShapeEnum from "../../enum/ShapeEnum";
 import Shape from "./Shape";
 import Point from "../base/Vertex";
-import Transform from "../../math/Transform";
 import Vertex from "../base/Vertex";
 
 class Rectangle extends Shape {
@@ -42,7 +41,7 @@ class Rectangle extends Shape {
     }
 
     public setVertex(vertex: Vertex, index: number): void {
-        if (index == 0) {
+        if (index === 2) {
             this.p2 = vertex;
 
             this.p1 = new Vertex([this.p2.coor.x, this.p0!.coor.y, 0], [0, 0, 0, 1]);
@@ -105,11 +104,10 @@ class Rectangle extends Shape {
     public getSameXPoint(num : number) : Point{
         let arr = [this.p0!, this.p1!, this.p2!, this.p3!];
         for(let i = 0; i < arr.length; i++){
-            if(i % 2 !== num % 2){
                 if(this.getPoint(num).coor.x === arr[i].coor.x && this.getPoint(num).coor.y !== arr[i].coor.y){
                     return arr[i];
                 }
-            }
+            
         }
         return this.p0!;
     }
@@ -117,11 +115,10 @@ class Rectangle extends Shape {
     public getSameYPoint(num : number) : Point{
         let arr = [this.p0!, this.p1!, this.p2!, this.p3!];
         for(let i = 0; i < arr.length; i++){
-            if(i % 2 === num % 2){
                 if(this.getPoint(num).coor.y === arr[i].coor.y && this.getPoint(num).coor.x !== arr[i].coor.x){
                     return arr[i];
                 }
-            }
+            
         }
         return this.p0!;
     }

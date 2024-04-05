@@ -6,8 +6,12 @@ import ShapeEnum from "../enum/ShapeEnum";
 import { hexToRgb } from "../utils/algorithm";
 import PolygonHandler from "./ShapeHandler/PolygonHandler";
 import RectangleHandler from "./ShapeHandler/RectangleHandler";
+import SquareHandler from "./ShapeHandler/SquareHandler";
+import LineHandler from "./ShapeHandler/LineHandler";
 import Polygon from "../object/shape/Polygon";
 import Rectangle from "../object/shape/Rectangle";
+import Square from "../object/shape/Square";
+import Line from "../object/shape/Line";
 
 
 export default class ToolsHandler{
@@ -16,12 +20,16 @@ export default class ToolsHandler{
     private document: Document;
     public polygonHandler: PolygonHandler;
     public rectangleHandler : RectangleHandler;
+    public squareHandler : SquareHandler;
+    public lineHandler : LineHandler;
 
     public constructor(document: Document){
         this.enabled = false;
         this.document = document;
         this.polygonHandler = new PolygonHandler(this.document);
         this.rectangleHandler = new RectangleHandler(this.document);
+        this.squareHandler = new SquareHandler(this.document); 
+        this.lineHandler = new LineHandler(this.document);
 
     }
 
@@ -64,6 +72,13 @@ export default class ToolsHandler{
                 break;
             case ShapeEnum.RECTANGLE:
                 this.rectangleHandler.eventListener();
+                break;
+            case ShapeEnum.SQUARE:
+                this.squareHandler.eventListener();
+                break;
+            case ShapeEnum.LINE:
+                // this.lineHandler.eventListener();
+                break;
             default:
                 break;
         }
@@ -210,10 +225,12 @@ export default class ToolsHandler{
                 this.polygonHandler.polygonMethodHTML(specialContainer);
                 break;
             case ShapeEnum.SQUARE:
-                this.squareMethod(specialContainer);
+                this.squareHandler.setSquare(this.selectedShape as Square)
+                this.squareHandler.squareMethodHTML(specialContainer);
                 break;
             case ShapeEnum.LINE:
-                this.lineMethod(specialContainer);
+                this.lineHandler.setLine(this.selectedShape as Line)
+                this.lineHandler.lineMethodHTML(specialContainer);
                 break;
             case ShapeEnum.RECTANGLE:
                 this.rectangleHandler.setRectangle(this.selectedShape as Rectangle)
@@ -224,66 +241,6 @@ export default class ToolsHandler{
         }
         let tools = this.document.getElementById("tools");
         tools?.appendChild(specialContainer);
-    }
-
-    
-
-    private squareMethod(container : HTMLDivElement): void{
-        let sliderScaleLabel = this.document.createElement("label");
-        sliderScaleLabel.innerHTML = "Slider Scale: ";
-        let sliderScaleInput = this.document.createElement("input");
-        sliderScaleInput.type = "range";
-        sliderScaleInput.id = "sliderScale";
-        sliderScaleInput.className = "slider-input";
-        sliderScaleInput.value = "0";
-        sliderScaleInput.min = "-100";
-        sliderScaleInput.max = "100";
-        sliderScaleInput.addEventListener("input", (event: Event) => {
-            let target = event.target as HTMLInputElement;
-            let value = target.value;
-            let valueSpan = this.document.getElementById("SliderScaleLabel");
-            if(valueSpan){
-                valueSpan.innerHTML = value;
-            }
-        });
-        let sliderScaleValue = this.document.createElement("span");
-        sliderScaleValue.innerHTML = "0";
-        sliderScaleValue.id = "SliderScaleLabel";
-        let sliderScaleInputValue = this.document.createElement("span");
-        sliderScaleInputValue.appendChild(sliderScaleInput);
-        sliderScaleInputValue.appendChild(sliderScaleValue);
-
-        container.appendChild(sliderScaleLabel);
-        container.appendChild(sliderScaleInputValue);
-    }
-
-    private lineMethod(container : HTMLDivElement): void{
-        let sliderLengthScaleLabel = this.document.createElement("label");
-        sliderLengthScaleLabel.innerHTML = "Slider Length: ";
-        let sliderLengthScaleInput = this.document.createElement("input");
-        sliderLengthScaleInput.type = "range";
-        sliderLengthScaleInput.id = "sliderLengthScale";
-        sliderLengthScaleInput.className = "slider-input";
-        sliderLengthScaleInput.value = "0";
-        sliderLengthScaleInput.min = "-100";
-        sliderLengthScaleInput.max = "100";
-        sliderLengthScaleInput.addEventListener("input", (event: Event) => {
-            let target = event.target as HTMLInputElement;
-            let value = target.value;
-            let valueSpan = this.document.getElementById("sliderLengthScaleLabel");
-            if(valueSpan){
-                valueSpan.innerHTML = value;
-            }
-        });
-        let sliderLengthScaleValue = this.document.createElement("span");
-        sliderLengthScaleValue.innerHTML = "0";
-        sliderLengthScaleValue.id = "sliderLengthScaleLabel";
-        let sliderLengthScaleInputValue = this.document.createElement("span");
-        sliderLengthScaleInputValue.appendChild(sliderLengthScaleInput);
-        sliderLengthScaleInputValue.appendChild(sliderLengthScaleValue);
-
-        container.appendChild(sliderLengthScaleLabel);
-        container.appendChild(sliderLengthScaleInputValue);
     }
 
     
@@ -298,6 +255,7 @@ export default class ToolsHandler{
             let tools = this.document.getElementById("tools");
             let rotationTool = this.document.getElementById("rotation-tool");
             let translateTools = this.document.getElementById("translate-tools");
+            let pointSelector = this.document.getElementById("points-container");
             let specialTools = this.document.getElementById("special-tools");
             if(rotationTool){
                 tools?.removeChild(rotationTool);
@@ -308,8 +266,12 @@ export default class ToolsHandler{
             if(specialTools){
                 tools?.removeChild(specialTools);
             }
+            if(pointSelector){
+                tools?.removeChild(pointSelector);
+            }
             this.specialMethodHTML();
             this.generalMethodHTML(); 
+            this.eventListener();
         }
         else{
             this.selectedShape = shape;

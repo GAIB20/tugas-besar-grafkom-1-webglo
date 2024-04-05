@@ -45,12 +45,12 @@ abstract class Shape {
 
         const mat = this.transform
             .projectionMat(gl.canvas.width, gl.canvas.height)
-            .multiply(this.transform.customTransformMat())
             .multiply(this.transform.translationMat())
             .multiply(this.transform.inputTransMat(centroid[0], centroid[1]))
             .multiply(this.transform.rotationMat())
             .multiply(this.transform.scaleMat())
-            .multiply(this.transform.inputTransMat(-centroid[0], -centroid[1]));
+            .multiply(this.transform.inputTransMat(-centroid[0], -centroid[1]))
+            .multiply(this.transform.customTransformMat());
             
 
         const matrixLoc = gl.getUniformLocation(program, "u_matrix");

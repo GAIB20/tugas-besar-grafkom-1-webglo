@@ -101,6 +101,8 @@ export default class RectangleHandler{
 
         //listener
         let pointOpt = this.document.getElementById("points") as HTMLSelectElement;
+
+        //reset the event listener
         pointOpt.addEventListener("change", (event: Event) => {
             this.setupNewPoint();
         });
@@ -109,10 +111,12 @@ export default class RectangleHandler{
 
     private setupNewPoint(): void{
         let pointsSelected = parseInt((this.document.getElementById("points") as HTMLSelectElement).value);
-        this.pivotPointWidth = _.cloneDeep(this.rectangle!.getSameXPoint(pointsSelected));
-        this.pivotPointHeight = _.cloneDeep(this.rectangle!.getSameYPoint(pointsSelected));
+        this.pivotPointWidth = _.cloneDeep(this.rectangle!.getSameYPoint(pointsSelected));
+        this.pivotPointHeight = _.cloneDeep(this.rectangle!.getSameXPoint(pointsSelected));
         this.scaleWidth = Matrix.identity();
         this.scaleHeight = Matrix.identity();
+        this.rectangle!.transform.setCustomMatrix(Matrix.identity());
+        this.resetScale();
     }
 
     public handleScaleWidth(value: number): void{
@@ -131,6 +135,18 @@ export default class RectangleHandler{
         this.scaleHeight = m0!.multiply(m1!)
         this.scaleHeight = this.scaleHeight.multiply(m2!);
         this.rectangle!.transform.setCustomMatrix(this.scaleHeight.multiply(this.scaleWidth));
+    }
+
+    public resetScale(): void{
+        let sliderWidth = this.document.getElementById("sliderWidth") as HTMLInputElement;
+        let sliderHeight = this.document.getElementById("sliderHeight") as HTMLInputElement;
+        sliderWidth.value = "10";
+        sliderHeight.value = "10";
+
+        let sliderWidthValue = this.document.getElementById("sliderWidthLabel") as HTMLSpanElement;
+        let sliderHeightValue = this.document.getElementById("SliderHeightLabel") as HTMLSpanElement;
+        sliderWidthValue.innerHTML = "1";
+        sliderHeightValue.innerHTML = "1";
     }
 
 
