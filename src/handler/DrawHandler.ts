@@ -7,7 +7,6 @@ import Rectangle from "../object/shape/Rectangle";
 import Shape from "../object/shape/Shape";
 import ToolsHandler from "./ToolsHandler";
 import FileHandler from "../io/FileHandler";
-import { ShapeFactory } from "../io/ShapeFactory";
 
 class DrawHandler {
     /** WEBGL */
@@ -132,18 +131,8 @@ class DrawHandler {
 
     private btnListener() {
         this.saveBtn?.addEventListener("click", () => {
-            console.log("click");
-            const data = FileHandler.convertToJSON(this.listOfShape);
-
-            const blob: Blob = new Blob([data], { type: "application/json" });
-            const url = URL.createObjectURL(blob);
-
-            const a = this.document.createElement("a");
-            a.href = url;
-            a.download = "data.json";
-            this.document.body.appendChild(a);
-
-            URL.revokeObjectURL(url);
+            if (this.listOfShape.length == 0) return;
+            FileHandler.write(this.listOfShape, this.document);
         });
         this.lineBtn?.addEventListener("click", () => {
             this.onDraw = false;

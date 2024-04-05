@@ -3,21 +3,28 @@ import Transform from "../math/Transform";
 import Vertex from "../object/base/Vertex";
 import Line from "../object/shape/Line";
 import Polygon from "../object/shape/Polygon";
+import Rectangle from "../object/shape/Rectangle";
 import Shape from "../object/shape/Shape";
 import Square from "../object/shape/Square";
 import { TransformBinding, VertexBinding } from "./bind/BaseBind";
-import { LineBinding, PolygonBinding, SquareBinding } from "./bind/ShapeBind";
+import {
+    LineBinding,
+    PolygonBinding,
+    RectangleBinding,
+    SquareBinding,
+} from "./bind/ShapeBind";
 
 export class ShapeFactory {
     public static create(object: any): Shape | null {
-        if (!object.shape) return null;
-
         switch (object.shape) {
             case ShapeEnum.LINE:
                 return ShapeFactory.line(object as LineBinding);
             case ShapeEnum.SQUARE:
                 return ShapeFactory.square(object as SquareBinding);
-            case ShapeEnum.LINE:
+            case ShapeEnum.RECTANGLE:
+                console.log("rectange");
+                return ShapeFactory.rectangle(object as RectangleBinding);
+            case ShapeEnum.POLYGON:
                 return ShapeFactory.polygon(object as PolygonBinding);
             default:
                 return null;
@@ -53,6 +60,26 @@ export class ShapeFactory {
         square.transform = transform;
 
         return square;
+    }
+
+    public static rectangle(raw: RectangleBinding): Rectangle {
+        console.log("rectangle");
+        console.log(raw);
+
+        const p0 = ShapeFactory.vertex(raw.p0);
+        const p1 = ShapeFactory.vertex(raw.p1);
+        const p2 = ShapeFactory.vertex(raw.p2);
+        const p3 = ShapeFactory.vertex(raw.p3);
+        const transform = ShapeFactory.transform(raw.transform);
+
+        const rect = new Rectangle(raw.id, p0);
+        rect.p1 = p1;
+        rect.p2 = p2;
+        rect.p3 = p3;
+        rect.transform = transform;
+        console.log(rect);
+
+        return rect;
     }
 
     public static line(raw: LineBinding): Line {

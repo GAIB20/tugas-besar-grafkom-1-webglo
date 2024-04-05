@@ -28,3 +28,14 @@ export interface SquareBinding {
     tf1: TransformBinding;
     tf3: TransformBinding;
 }
+
+export interface RectangleBinding {
+    id: number;
+    transform: TransformBinding;
+    shape: ShapeEnum;
+    the_centroid: VertexBinding;
+    p0: VertexBinding;
+    p1: VertexBinding;
+    p2: VertexBinding;
+    p3: VertexBinding;
+}
